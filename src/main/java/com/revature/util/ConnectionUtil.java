@@ -9,33 +9,32 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionUtil {
-	
-	private ConnectionUtil connectionUtil;
-	
+
+	private static ConnectionUtil connectionUtil;
+
 	private ConnectionUtil() {
-		
+
 	}
-	
-	public ConnectionUtil getInstance() {
-		if(connectionUtil == null) {
+
+	public static ConnectionUtil getInstance() {
+		if (connectionUtil == null) {
 			connectionUtil = new ConnectionUtil();
 			return connectionUtil;
-		}else {
+		} else {
 			return connectionUtil;
 		}
-		
-		
+
 	}
-	
+
 	public Connection getConnection() throws SQLException, IOException {
 		Properties prop = new Properties();
 		InputStream in = new FileInputStream("connection.properties");
 		prop.load(in);
-		
+
 		String url = prop.getProperty("url");
 		String user = prop.getProperty("user");
 		String password = prop.getProperty("password");
-		
+
 		return DriverManager.getConnection(url, user, password);
 	}
 
