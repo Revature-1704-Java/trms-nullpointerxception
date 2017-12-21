@@ -79,5 +79,4 @@ CREATE TABLE reimbursement (
     CONSTRAINT fk_eventtypeid FOREIGN KEY (eventtypeid) REFERENCES eventtype(eventtypeid),
     CONSTRAINT fk_approvalid FOREIGN KEY (approvalid) REFERENCES approval(approvalid)
 );
-
 ALTER TABLE department ADD CONSTRAINT fk_departmentheadid FOREIGN KEY (departmentheadid) REFERENCES employee(employeeid);
