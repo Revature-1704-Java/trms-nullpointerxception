@@ -9,11 +9,9 @@ public class Employee implements Serializable {
 	private String username;
 	private String firstName;
 	private String lastName;
-	private String address;
-	private String city;
-	private String country;
 	private int reportsTo;
 	private boolean isBenCo;
+	private double availablereimbursement;
 
 	public Employee() {
 		super();
@@ -59,30 +57,6 @@ public class Employee implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
 	public int getReportsTo() {
 		return reportsTo;
 	}
@@ -97,6 +71,14 @@ public class Employee implements Serializable {
 
 	public void setBenCo(boolean isBenCo) {
 		this.isBenCo = isBenCo;
+	}
+
+	public double getAvailablereimbursement() {
+		return availablereimbursement;
+	}
+
+	public void setAvailablereimbursement(double availablereimbursement) {
+		this.availablereimbursement = availablereimbursement;
 	}
 
 }

@@ -12,11 +12,11 @@ public class Reimbursement implements Serializable {
 	private int supervisorId;
 	private int departmentHeadId;
 	private int benCoId;
-	private Date creationDate;
-	private Timestamp creationTime;
+	private int approvalprocessId;
 	private int reimbursementLocationId;
 	private String description;
 	private double cost;
+	private double adjustedCost;
 	private int gradeFormatId;
 	private int eventTypeId;
 	private String workJustification;
@@ -24,6 +24,8 @@ public class Reimbursement implements Serializable {
 	private Blob approvalDocument;
 	private int approvalId;
 	private int timeMissed;
+	private String denyReason;
+	private String inflatedReimbursementReason;
 
 	public Reimbursement() {
 		super();
@@ -69,20 +71,12 @@ public class Reimbursement implements Serializable {
 		this.benCoId = benCoId;
 	}
 
-	public Date getCreationDate() {
-		return creationDate;
+	public int getApprovalprocessId() {
+		return approvalprocessId;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Timestamp getCreationTime() {
-		return creationTime;
-	}
-
-	public void setCreationTime(Timestamp creationTime) {
-		this.creationTime = creationTime;
+	public void setApprovalprocessId(int approvalprocessId) {
+		this.approvalprocessId = approvalprocessId;
 	}
 
 	public int getReimbursementLocationId() {
@@ -107,6 +101,14 @@ public class Reimbursement implements Serializable {
 
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+
+	public double getAdjustedCost() {
+		return adjustedCost;
+	}
+
+	public void setAdjustedCost(double adjustedCost) {
+		this.adjustedCost = adjustedCost;
 	}
 
 	public int getGradeFormatId() {
@@ -163,6 +165,22 @@ public class Reimbursement implements Serializable {
 
 	public void setTimeMissed(int timeMissed) {
 		this.timeMissed = timeMissed;
+	}
+
+	public String getDenyReason() {
+		return denyReason;
+	}
+
+	public void setDenyReason(String denyReason) {
+		this.denyReason = denyReason;
+	}
+
+	public String getInflatedReimbursementReason() {
+		return inflatedReimbursementReason;
+	}
+
+	public void setInflatedReimbursementReason(String inflatedReimbursementReason) {
+		this.inflatedReimbursementReason = inflatedReimbursementReason;
 	}
 
 }
