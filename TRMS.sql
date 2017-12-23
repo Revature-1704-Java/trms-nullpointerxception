@@ -117,6 +117,58 @@ INSERT INTO gradeformat VALUES (3, 'PERCENTAGE', '70');
 INSERT INTO gradeformat VALUES (4, 'PRESENTATION', 'NONE');
 
 --Sequence for Employee table
-
-
-
+CREATE SEQUENCE employee_sequence
+START WITH 1
+INCREMENT BY 1;
+/
+--Sequence for Reimbursement table
+CREATE SEQUENCE reimbursement_sequence
+START WITH 1
+INCREMENT BY 1;
+/
+--Sequence for Employee Role table
+CREATE SEQUENCE employeerole_sequence
+START WITH 1
+INCREMENT BY 1;
+/
+--Sequence for Approval Process table
+CREATE SEQUENCE approvalprocess_sequence
+START WITH 1
+INCREMENT BY 1;
+--Sequence for Reimbursement Location table
+CREATE SEQUENCE reimbursementlocation_sequence
+START WITH 1
+INCREMENT BY 1;
+/
+--Trigger for Employee Insert
+CREATE OR REPLACE TRIGGER employee_insert_trigger
+BEFORE INSERT ON employee
+FOR EACH ROW
+BEGIN
+    SELECT employee_sequence.NEXTVAL INTO :NEW.employeeid FROM DUAL;
+END;
+/
+--Trigger for Reimbursement Insert
+CREATE OR REPLACE TRIGGER reimbursement_insert_trigger
+BEFORE INSERT ON reimbursement
+FOR EACH ROW
+BEGIN
+    SELECT reimbursement_sequence.NEXTVAL INTO :NEW.reimbursementid FROM DUAL;
+END;
+/
+--Trigger for Employee Role Insert
+CREATE OR REPLACE TRIGGER employeerole_insert_trigger
+BEFORE INSERT ON employeerole
+FOR EACH ROW
+BEGIN
+    SELECT employeerole_sequence.NEXTVAL INTO :NEW.employeeroleid FROM DUAL;
+END;
+/
+--Trigger for Approval Process Insert
+CREATE OR REPLACE TRIGGER approvalprocess_insert_trigger
+BEFORE INSERT ON approvalprocess
+FOR EACH ROW
+BEGIN
+    SELECT approvalprocess_sequence.NEXTVAL INTO :NEW.approvalprocessid FROM DUAL;
+END;
+/
