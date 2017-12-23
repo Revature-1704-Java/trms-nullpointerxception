@@ -1,8 +1,8 @@
 -- Grade Format Create Table
 CREATE TABLE gradeformat (
     gradeformatid INTEGER PRIMARY KEY,
-    format VARCHAR2(10) NOT NULL,
-    defaultpassinggrade VARCHAR2(20) NOT NULL
+    format VARCHAR2(30) NOT NULL,
+    defaultpassinggrade VARCHAR2(30) NOT NULL
 );
 
 -- Event Type Create Table
@@ -15,9 +15,8 @@ CREATE TABLE eventtype(
 -- Approval Create Table
 CREATE TABLE approval (
     approvalid INTEGER PRIMARY KEY,
-    status VARCHAR2(10) NOT NULL
+    status VARCHAR2(50) NOT NULL
 );
-
 --Reimbursement Location Create Table
 CREATE TABLE reimbursementlocation (
     reimbursementlocationid INTEGER PRIMARY KEY,
@@ -28,26 +27,29 @@ CREATE TABLE reimbursementlocation (
     country VARCHAR2(20) NOT NULL
 );
 
---Department Create Table
-CREATE TABLE department (
-    departmentid INTEGER PRIMARY KEY,
-    department VARCHAR2(20) NOT NULL,
-    departmentheadid INTEGER NOT NULL
+--Employee type Create table
+CREATE TABLE employeetype (
+    employeetypeid INTEGER PRIMARY KEY,
+    employeetype VARCHAR2(50) NOT NULL
 );
-
 --Employee Create Table
 CREATE TABLE employee (
     employeeid INTEGER PRIMARY KEY,
-    departmentid INTEGER NOT NULL,
-    username VARCHAR2(15) NOT NULL,
+    email VARCHAR2(15) NOT NULL,
     password VARCHAR2(26) NOT NULL,
     firstname VARCHAR2(15) NOT NULL,
     lastname VARCHAR2(15) NOT NULL,
     reportsto INTEGER,
-    isbenco VARCHAR(1) NOT NULL,
-    availablereimbursement NUMERIC(*,2) NOT NULL,
-    CONSTRAINT fk_departmentid FOREIGN KEY (departmentid) REFERENCES department(departmentid),
     CONSTRAINT fk_reportsto FOREIGN KEY (reportsto) REFERENCES employee(employeeid)
+);
+
+--Employee Role Create Table
+CREATE TABLE employeerole(
+    employeeroleid INTEGER PRIMARY KEY,
+    employeeid INTEGER NOT NULL,
+    employeetypeid INTEGER NOT NULL,
+    CONSTRAINT fk_roleemployeeid FOREIGN KEY (employeeid) REFERENCES employee(employeeid),
+    CONSTRAINT fk_employeetypeid FOREIGN KEY (employeetypeid) REFERENCES employeetype(employeetypeid)
 );
 
 --Approval Process create table
@@ -57,7 +59,6 @@ CREATE TABLE approvalprocess (
     employeecreationtime TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
     supervisorapprovedate DATE,
     departmentheadapprovedate DATE
-
 );
 
 -- Reimbursement Create Table
@@ -93,10 +94,6 @@ CREATE TABLE reimbursement (
 );
 
 
-
--- Add Constraint to department
-ALTER TABLE department ADD CONSTRAINT fk_departmentheadid FOREIGN KEY (departmentheadid) REFERENCES employee(employeeid);
-ALTER TABLE gradeformat MODIFY format VARCHAR2(20);
 -- Populate Event Type table
 INSERT INTO eventtype VALUES (1, 'University Course', 0.80);
 INSERT INTO eventtype VALUES (2, 'Seminar', 0.60);
@@ -107,11 +104,12 @@ INSERT INTO eventtype VALUES (6, 'Other', 0.30);
 
 INSERT INTO approval VALUES (1, 'PENDING APPROVAL FROM SUPERVISOR');
 INSERT INTO approval VALUES (2, 'PENDING APPROVAL FROM DEPARTMENT HEAD');
-INSERT INTO approval VALUES (3, 'PENDING APPROVAL FROM BENEFIT COORDINATOR');
+INSERT INTO approval VALUES (3, 'PENDING APPROVAL FROM BENEFITS COORDINATOR');
 INSERT INTO approval VALUES (4, 'NEED ADDITIONAL INFORMATION');
 INSERT INTO approval VALUES (5, 'REIMBURSEMENT AMOUNT ALTERED');
 INSERT INTO approval VALUES (6, 'EMPLOYEE CANCELED');
 INSERT INTO approval VALUES (7, 'DENIED');
+INSERT INTO approval VALUES (8, 'APPROVED');
 
 INSERT INTO gradeformat VALUES (1, 'PASS/FAIL', 'PASS');
 INSERT INTO gradeformat VALUES (2, 'LETTER GRADES', 'C');
