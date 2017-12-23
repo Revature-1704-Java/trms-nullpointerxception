@@ -115,3 +115,8 @@ INSERT INTO gradeformat VALUES (1, 'PASS/FAIL', 'PASS');
 INSERT INTO gradeformat VALUES (2, 'LETTER GRADES', 'C');
 INSERT INTO gradeformat VALUES (3, 'PERCENTAGE', '70');
 INSERT INTO gradeformat VALUES (4, 'PRESENTATION', 'NONE');
+
+--Sequence for Employee table
+
+
+
