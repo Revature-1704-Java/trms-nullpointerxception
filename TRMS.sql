@@ -116,6 +116,10 @@ INSERT INTO gradeformat VALUES (2, 'LETTER GRADES', 'C');
 INSERT INTO gradeformat VALUES (3, 'PERCENTAGE', '70');
 INSERT INTO gradeformat VALUES (4, 'PRESENTATION', 'NONE');
 
+INSERT INTO employeetype VALUES (1, 'Employee');
+INSERT INTO employeetype VALUES (2, 'Supervisor');
+INSERT INTO employeetype VALUES (3, 'Department Head');
+INSERT INTO employeetype VALUES (4, 'Benefits Coordinator');
 --Sequence for Employee table
 CREATE SEQUENCE employee_sequence
 START WITH 1
@@ -170,5 +174,30 @@ BEFORE INSERT ON approvalprocess
 FOR EACH ROW
 BEGIN
     SELECT approvalprocess_sequence.NEXTVAL INTO :NEW.approvalprocessid FROM DUAL;
+END;
+/
+--Trigger for Reimbursement Location Insert
+CREATE OR REPLACE TRIGGER reimlocation_insert_trigger
+BEFORE INSERT ON reimbursementlocation
+FOR EACH ROW
+BEGIN
+    SELECT reimbursementlocation_sequence.NEXTVAL INTO :NEW.reimbursementlocationid FROM DUAL;
+END;
+/
+
+
+--Stored Procudure for inserting Employee
+CREATE OR REPLACE PROCEDURE sp_insert_employee(inputemail IN employee.email%TYPE, inputpassword IN employee.password%TYPE, inputfirstname IN employee.firstname%TYPE, inputlastname IN employee.lastname%TYPE, inputreportsto IN employee.reportsto%TYPE, issuccessful OUT VARCHAR2)
+AS
+BEGIN
+    SAVEPOINT savepoint;
+    INSERT INTO employee (email,password,firstname,lastname,reportsto)VALUES(inputemail,inputpassword,inputfirstname,inputlastname,inputreportsto);
+    isSuccessful := 1;
+    COMMIT;
+    
+    EXCEPTION
+    WHEN OTHERS THEN
+        isSuccessful := 0;
+    ROLLBACK TO SAVEPOINT savepoint;
 END;
 /
