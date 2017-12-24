@@ -5,13 +5,10 @@ import java.io.Serializable;
 public class Employee implements Serializable {
 
 	private int employeeId;
-	private int departmentId;
 	private String username;
 	private String firstName;
 	private String lastName;
 	private int reportsTo;
-	private boolean isBenCo;
-	private double availablereimbursement;
 
 	public Employee() {
 		super();
@@ -23,14 +20,6 @@ public class Employee implements Serializable {
 
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
-	}
-
-	public int getDepartmentId() {
-		return departmentId;
-	}
-
-	public void setDepartmentId(int departmentId) {
-		this.departmentId = departmentId;
 	}
 
 	public String getUsername() {
@@ -64,21 +53,6 @@ public class Employee implements Serializable {
 	public void setReportsTo(int reportsTo) {
 		this.reportsTo = reportsTo;
 	}
-
-	public boolean isBenCo() {
-		return isBenCo;
-	}
-
-	public void setBenCo(boolean isBenCo) {
-		this.isBenCo = isBenCo;
-	}
-
-	public double getAvailablereimbursement() {
-		return availablereimbursement;
-	}
-
-	public void setAvailablereimbursement(double availablereimbursement) {
-		this.availablereimbursement = availablereimbursement;
-	}
+	
 
 }
