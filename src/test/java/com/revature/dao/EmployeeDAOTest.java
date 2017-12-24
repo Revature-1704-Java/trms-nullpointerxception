@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -56,6 +57,7 @@ public class EmployeeDAOTest {
 	
 	@Test
 	public void getEmployee() {
+		cleanUp();
 		employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null);
 		Employee e = employeeDAO.getEmployee("Test", "TestPassword");
 		assertNotNull(e);
@@ -63,15 +65,30 @@ public class EmployeeDAOTest {
 	
 	@Test
 	public void getNonExistentEmployee() {
+		cleanUp();
 		Employee e = employeeDAO.getEmployee("none", "none");
 		assertNotNull(e);
 	}
 	
 	@Test 
 	public void insertRoles() {
+		cleanUp();
 		employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null);
 		Employee e = employeeDAO.getEmployee("Test", "TestPassword");
 		assertEquals(2, employeeDAO.setRoles(e, "Employee", "Supervisor"));
+	}
+	
+	@Test
+	public void getRolesFromEmployee() {
+		cleanUp();
+		employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null);
+		Employee e = employeeDAO.getEmployee("Test", "TestPassword");
+		employeeDAO.setRoles(e, "Employee", "Supervisor");
+		String[] arr = {"Employee", "Supervisor"};
+		ArrayList<String> a = (ArrayList<String>)employeeDAO.getAllRolesForEmployee(e);
+		for(String s : arr) {
+			assertTrue(a.contains(s));
+		}
 	}
 
 }

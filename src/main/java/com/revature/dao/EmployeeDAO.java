@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.revature.bean.Employee;
 import com.revature.util.ConnectionUtil;
@@ -90,7 +92,7 @@ public class EmployeeDAO {
 	}
 
 	/**
-	 * 
+	 * Find an employee based on an email and password combination.
 	 * @param email The email of the employee to find.
 	 * @param password The pass word of the employee to find
 	 * @return The employee
@@ -126,10 +128,17 @@ public class EmployeeDAO {
 			e.printStackTrace();
 		}
 		
+		employeeDAO.getAllRolesForEmployee(em);
+		
 		return em;
 	}
 	
-	
+	/**
+	 * Set the roles for a specific employee. Also updates the employee to have those roles.
+	 * @param e The Employee for which the roles will be set for
+	 * @param roles Vararg of roles to add to the employee
+	 * @return The number of roles added.
+	 */
 	public int setRoles(Employee e, String ...roles) {
 		String sql = "INSERT INTO employeerole (employeeid, employeetypeid) VALUES (?, (SELECT employeetypeid FROM employeetype WHERE employeetype.employeetype=?))";
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
@@ -144,6 +153,7 @@ public class EmployeeDAO {
 				ps.setInt(1, e.getEmployeeId());
 				ps.setString(2, role);
 				rolesAdded += ps.executeUpdate();
+				e.getRoles().add(role);
 				
 			}
 			
@@ -155,28 +165,45 @@ public class EmployeeDAO {
 			e1.printStackTrace();
 		}
 		
+		
+		
 		return rolesAdded;
 	}
 	
-//	public List<String> getAllRoles(Employee e){
-//		ArrayList<String> roles = new ArrayList<String>();
-//		String sql  = "SELECT employeetype FROM (SELECT * FROM employeerol WHERE employeeid=?) WHERE employeetypeid= ";
-//		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
-//		PreparedStatement ps = null;
-//		try (Connection conn = connectionUtil.getConnection()){
-//			
-//			ps = conn.prepareStatement(arg0)
-//			
-//		} catch (SQLException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-//		return null;
-//		
-//	}
+	/**
+	 * Get all the roles for a particular employee.
+	 * @param e The employee for which to get all the roles from.
+	 * @return All roles held by the employee in the form of a list of strings.
+	 */
+	public List<String> getAllRolesForEmployee(Employee e){
+		ArrayList<String> roles = new ArrayList<String>();
+		String sql  = "SELECT employeetype.employeetype FROM (SELECT * FROM employeerole WHERE employeeid=?) result INNER JOIN employeetype ON result.employeetypeid=employeetype.employeetypeid";
+		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try (Connection conn = connectionUtil.getConnection()){
+			
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, e.getEmployeeId());
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				roles.add(rs.getString(1));
+			}
+			ps.close();
+			rs.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		e.setRoles(roles);
+		
+		return roles;
+		
+	}
 	
 }

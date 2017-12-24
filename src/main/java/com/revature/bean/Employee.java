@@ -1,6 +1,7 @@
 package com.revature.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Employee implements Serializable {
 
@@ -9,6 +10,7 @@ public class Employee implements Serializable {
 	private String firstName;
 	private String lastName;
 	private int reportsTo;
+	private List<String> roles;
 
 	public Employee() {
 		super();
@@ -52,6 +54,14 @@ public class Employee implements Serializable {
 
 	public void setReportsTo(int reportsTo) {
 		this.reportsTo = reportsTo;
+	}
+	
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 	
 
