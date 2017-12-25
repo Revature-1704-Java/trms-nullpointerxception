@@ -1,15 +1,12 @@
 package com.revature.dao;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,13 +15,15 @@ import org.junit.Test;
 import com.revature.bean.Employee;
 import com.revature.util.ConnectionUtil;
 
-public class EmployeeDAOTest {
+public class ReimbursementDAOTest {
 	
 	private EmployeeDAO employeeDAO;
+	private ReimbursementDAO reimbursementDAO;
 	
 	@Before
 	public void setUp() {
 		employeeDAO = EmployeeDAO.getInstance();
+		reimbursementDAO = ReimbursementDAO.getInstance();
 	}
 	
 	@After
@@ -38,6 +37,7 @@ public class EmployeeDAOTest {
 		
 		Statement s = null;
 		try (Connection conn = connectionUtil.getConnection()){
+			
 			s = conn.createStatement();
 			s.execute(rolesSQL);
 			s.close();
@@ -54,6 +54,7 @@ public class EmployeeDAOTest {
 			s.execute(employeeSQL);
 			s.close();
 			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,40 +65,10 @@ public class EmployeeDAOTest {
 	}
 	
 	@Test
-	public void insertEmployee() {
-		assertTrue(employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null));
-	}
-	
-	@Test
-	public void getEmployee() {
-		employeeDAO.create("Test1", "TestPassword", "Steven", "Sagun", null);
-		Employee e = employeeDAO.getEmployee("Test1", "TestPassword");
-		assertNotEquals(0, e.getEmployeeId());
-	}
-	
-	@Test
-	public void getNonExistentEmployee() {
-		Employee e = employeeDAO.getEmployee("none", "none");
-		assertEquals(0,e.getEmployeeId());
-	}
-	
-	@Test 
-	public void insertRoles() {
-		employeeDAO.create("Test2", "TestPassword", "Steven", "Sagun", null);
-		Employee e = employeeDAO.getEmployee("Test2", "TestPassword");
-		assertEquals(2, employeeDAO.setRoles(e, "Employee", "Supervisor"));
-	}
-	
-	@Test
-	public void getRolesFromEmployee() {
-		employeeDAO.create("Test3", "TestPassword", "Steven", "Sagun", null);
-		Employee e = employeeDAO.getEmployee("Test3", "TestPassword");
-		employeeDAO.setRoles(e, "Employee", "Supervisor");
-		String[] arr = {"Employee", "Supervisor"};
-		ArrayList<String> a = (ArrayList<String>)employeeDAO.getAllRolesForEmployee(e);
-		for(String s : arr) {
-			assertTrue(a.contains(s));
-		}
+	public void createReimbursement() {
+		employeeDAO.create("email", "password", "f", "s", null);
+		Employee e = employeeDAO.getEmployee("email", "password");
+		assertNotEquals(0, reimbursementDAO.create(e, "test", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa"));
 	}
 
 }

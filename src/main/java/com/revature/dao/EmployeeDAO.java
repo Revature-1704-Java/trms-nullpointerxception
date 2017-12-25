@@ -110,15 +110,19 @@ public class EmployeeDAO {
 			ps.setString(2, password);
 			
 			rs = ps.executeQuery();
-			
 			em = new Employee();
 			while(rs.next()) {
 				em.setEmployeeId(rs.getInt(1));
-				em.setUsername(rs.getString(2));
+				em.setEmail(rs.getString(2));
 				em.setFirstName(rs.getString(4));
 				em.setLastName(rs.getString(5));
 				em.setReportsTo(rs.getInt(6));
 			}
+			
+			System.out.println(em.getEmail());
+			
+			rs.close();
+			ps.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

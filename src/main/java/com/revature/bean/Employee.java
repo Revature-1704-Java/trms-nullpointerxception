@@ -6,7 +6,7 @@ import java.util.List;
 public class Employee implements Serializable {
 
 	private int employeeId;
-	private String username;
+	private String email;
 	private String firstName;
 	private String lastName;
 	private int reportsTo;
@@ -24,12 +24,12 @@ public class Employee implements Serializable {
 		this.employeeId = employeeId;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getFirstName() {

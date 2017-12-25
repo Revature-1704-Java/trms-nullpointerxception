@@ -201,3 +201,29 @@ BEGIN
     ROLLBACK TO SAVEPOINT savepoint;
 END;
 /
+
+
+--Stored Procedure for creating an Approval Process for a reimbursement
+CREATE OR REPLACE PROCEDURE sp_insert_approvalprocess(inputdate IN DATE, inputtimestamp IN TIMESTAMP WITH LOCAL TIME ZONE, pk OUT INTEGER)
+AS
+BEGIN
+    INSERT INTO approvalprocess (employeecreationdate, employeecreationtime, supervisorapprovedate, departmentheadapprovedate) VALUES (inputdate, inputtimestamp, null, null) RETURNING approvalprocessid INTO pk;
+END;
+/
+--Stored Procedure for creating a reimbursement location record for a reimbursement;
+CREATE OR REPLACE PROCEDURE sp_insert_reimlocation(inputdate IN DATE, inputaddress IN VARCHAR, inputcity IN VARCHAR, inputzip IN VARCHAR, inputcountry IN VARCHAR,pk OUT INTEGER)
+AS
+BEGIN
+    INSERT INTO reimbursementlocation (startdate, address, city, zip, country) VALUES (inputdate,inputaddress,inputcity,inputzip,inputcountry) RETURNING reimbursementlocationid INTO pk;
+END;
+/
+--Stored Procedure for creating a reimbursement
+CREATE OR REPLACE PROCEDURE sp_insert_reimbursement (inputemployeeid IN INTEGER, inputapprovalprocessid IN INTEGER, inputreimbursementlocationid IN INTEGER, inputdescription IN VARCHAR, inputcost IN NUMBER, inputgradeformat IN VARCHAR, inputeventtype IN VARCHAR, inputworkjustification IN VARCHAR, inputattachment IN BLOB, inputapprovaldocument IN BLOB, inputtimemissed IN INTEGER, pk OUT INTEGER )
+AS pk_gradeformat INTEGER; pk_eventtype INTEGER; pk_approval INTEGER;
+BEGIN
+    SELECT gradeformatid INTO pk_gradeformat FROM gradeformat WHERE format=inputgradeformat;
+    SELECT eventtypeid INTO pk_eventtype FROM eventtype WHERE eventtype=inputeventtype;
+    SELECT approvalid INTO pk_approval FROM approval WHERE status='PENDING APPROVAL FROM SUPERVISOR';
+    INSERT INTO reimbursement (employeeid, approvalprocessid, reimbursementlocationid, description, cost, gradeformatid, eventtypeid, workjustification, attachment, approvaldocument, approvalid, timemissed) VALUES (inputemployeeid, inputapprovalprocessid, inputreimbursementlocationid, inputdescription, inputcost, pk_gradeformat, pk_eventtype, inputworkjustification, inputattachment, inputapprovaldocument, pk_approval, inputtimemissed) RETURNING reimbursementid INTO pk;
+END;
+/
