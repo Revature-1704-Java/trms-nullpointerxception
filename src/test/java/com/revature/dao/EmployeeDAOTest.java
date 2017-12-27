@@ -65,12 +65,12 @@ public class EmployeeDAOTest {
 	
 	@Test
 	public void insertEmployee() {
-		assertTrue(employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null));
+		assertTrue(employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null, 1));
 	}
 	
 	@Test
 	public void getEmployee() {
-		employeeDAO.create("Test1", "TestPassword", "Steven", "Sagun", null);
+		employeeDAO.create("Test1", "TestPassword", "Steven", "Sagun", null, 1);
 		Employee e = employeeDAO.getEmployee("Test1", "TestPassword");
 		assertNotEquals(0, e.getEmployeeId());
 	}
@@ -83,14 +83,14 @@ public class EmployeeDAOTest {
 	
 	@Test 
 	public void insertRoles() {
-		employeeDAO.create("Test2", "TestPassword", "Steven", "Sagun", null);
+		employeeDAO.create("Test2", "TestPassword", "Steven", "Sagun", null, 1);
 		Employee e = employeeDAO.getEmployee("Test2", "TestPassword");
 		assertEquals(2, employeeDAO.setRoles(e, "Employee", "Supervisor"));
 	}
 	
 	@Test
 	public void getRolesFromEmployee() {
-		employeeDAO.create("Test3", "TestPassword", "Steven", "Sagun", null);
+		employeeDAO.create("Test3", "TestPassword", "Steven", "Sagun", null, 1);
 		Employee e = employeeDAO.getEmployee("Test3", "TestPassword");
 		employeeDAO.setRoles(e, "Employee", "Supervisor");
 		String[] arr = {"Employee", "Supervisor"};

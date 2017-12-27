@@ -45,12 +45,12 @@ public class EmployeeDAO {
 	 * @param reportsTo The id of the employee whom the new employee would directly work under.
 	 * @return true if the stored procedure ran successfully. false if it didn't.
 	 */
-	public boolean create(String email, String password, String firstName, String lastName, Integer reportsTo) {
+	public boolean create(String email, String password, String firstName, String lastName, Integer reportsTo, Integer departmentId) {
 
 		
 		boolean isSuccessful = false;
 		
-		String sql = "{call sp_insert_employee (?, ?, ?, ?, ?, ?)}";
+		String sql = "{call sp_insert_employee (?, ?, ?, ?, ?, ?, ?)}";
 		
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		
@@ -67,13 +67,13 @@ public class EmployeeDAO {
 			}else {
 				callableStatement.setInt(5, reportsTo);
 			}
+			callableStatement.setInt(6, departmentId);
 			
-			
-			callableStatement.registerOutParameter(6, Types.VARCHAR);
+			callableStatement.registerOutParameter(7, Types.VARCHAR);
 			
 			callableStatement.execute();
 			
-			isSuccessful = callableStatement.getBoolean(6);
+			isSuccessful = callableStatement.getBoolean(7);
 			
 			callableStatement.close();
 			
@@ -118,8 +118,6 @@ public class EmployeeDAO {
 				em.setLastName(rs.getString(5));
 				em.setReportsTo(rs.getInt(6));
 			}
-			
-			System.out.println(em.getEmail());
 			
 			rs.close();
 			ps.close();

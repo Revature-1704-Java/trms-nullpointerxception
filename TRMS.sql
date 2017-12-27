@@ -40,7 +40,9 @@ CREATE TABLE employee (
     firstname VARCHAR2(15) NOT NULL,
     lastname VARCHAR2(15) NOT NULL,
     reportsto INTEGER,
-    CONSTRAINT fk_reportsto FOREIGN KEY (reportsto) REFERENCES employee(employeeid)
+    departmentid INTEGER NOT NULL,
+    CONSTRAINT fk_reportsto FOREIGN KEY (reportsto) REFERENCES employee(employeeid),
+    CONSTRAINT fk_departmentid FOREIGN KEY (departmentid) REFERENCES();
 );
 
 --Employee Role Create Table
@@ -50,6 +52,12 @@ CREATE TABLE employeerole(
     employeetypeid INTEGER NOT NULL,
     CONSTRAINT fk_roleemployeeid FOREIGN KEY (employeeid) REFERENCES employee(employeeid),
     CONSTRAINT fk_employeetypeid FOREIGN KEY (employeetypeid) REFERENCES employeetype(employeetypeid)
+);
+
+--Department Create table
+CREATE TABLE department(
+    departmentid INTEGER PRIMARY KEY,
+    department VARCHAR2(100) NOT NULL
 );
 
 --Approval Process create table
@@ -120,6 +128,10 @@ INSERT INTO employeetype VALUES (1, 'Employee');
 INSERT INTO employeetype VALUES (2, 'Supervisor');
 INSERT INTO employeetype VALUES (3, 'Department Head');
 INSERT INTO employeetype VALUES (4, 'Benefits Coordinator');
+
+INSERT INTO department VALUES(1, 'Department 1');
+INSERT INTO department VALUES(2, 'Department 2');
+INSERT INTO department VALUES(3, 'Department 3');
 --Sequence for Employee table
 CREATE SEQUENCE employee_sequence
 START WITH 1
@@ -187,11 +199,11 @@ END;
 
 
 --Stored Procudure for inserting Employee
-CREATE OR REPLACE PROCEDURE sp_insert_employee(inputemail IN employee.email%TYPE, inputpassword IN employee.password%TYPE, inputfirstname IN employee.firstname%TYPE, inputlastname IN employee.lastname%TYPE, inputreportsto IN employee.reportsto%TYPE, issuccessful OUT VARCHAR2)
+CREATE OR REPLACE PROCEDURE sp_insert_employee(inputemail IN employee.email%TYPE, inputpassword IN employee.password%TYPE, inputfirstname IN employee.firstname%TYPE, inputlastname IN employee.lastname%TYPE, inputreportsto IN employee.reportsto%TYPE, inputdepartmentid IN employee.departmentid%TYPE, issuccessful OUT VARCHAR2)
 AS
 BEGIN
     SAVEPOINT savepoint;
-    INSERT INTO employee (email,password,firstname,lastname,reportsto)VALUES(inputemail,inputpassword,inputfirstname,inputlastname,inputreportsto);
+    INSERT INTO employee (email,password,firstname,lastname,reportsto, departmentid)VALUES(inputemail,inputpassword,inputfirstname,inputlastname,inputreportsto, inputdepartmentid);
     isSuccessful := 1;
     COMMIT;
     
@@ -225,5 +237,16 @@ BEGIN
     SELECT eventtypeid INTO pk_eventtype FROM eventtype WHERE eventtype=inputeventtype;
     SELECT approvalid INTO pk_approval FROM approval WHERE status='PENDING APPROVAL FROM SUPERVISOR';
     INSERT INTO reimbursement (employeeid, approvalprocessid, reimbursementlocationid, description, cost, gradeformatid, eventtypeid, workjustification, attachment, approvaldocument, approvalid, timemissed) VALUES (inputemployeeid, inputapprovalprocessid, inputreimbursementlocationid, inputdescription, inputcost, pk_gradeformat, pk_eventtype, inputworkjustification, inputattachment, inputapprovaldocument, pk_approval, inputtimemissed) RETURNING reimbursementid INTO pk;
+END;
+/
+
+--Stored Procedure for retrieving all reimbursement information by employeeid
+CREATE OR REPLACE PROCEDURE sp_select_reimbursement (inputemployeeid IN INTEGER, rs OUT SYS_REFCURSOR)
+AS 
+BEGIN
+--SELECT * INTO rs FROM (((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) WHERE reimbursement.employeeid=inputemployeeid;
+    OPEN rs FOR
+    SELECT * FROM (((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) WHERE reimbursement.employeeid=inputemployeeid ORDER BY employeecreationdate, employeecreationtime;
+
 END;
 /
