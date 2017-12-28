@@ -35,7 +35,7 @@ CREATE TABLE employeetype (
 --Employee Create Table
 CREATE TABLE employee (
     employeeid INTEGER PRIMARY KEY,
-    email VARCHAR2(15) NOT NULL,
+    email VARCHAR2(15) NOT NULL UNIQUE,
     password VARCHAR2(26) NOT NULL,
     firstname VARCHAR2(15) NOT NULL,
     lastname VARCHAR2(15) NOT NULL,
@@ -239,7 +239,7 @@ BEGIN
     INSERT INTO reimbursement (employeeid, approvalprocessid, reimbursementlocationid, description, cost, gradeformatid, eventtypeid, workjustification, attachment, approvaldocument, approvalid, timemissed) VALUES (inputemployeeid, inputapprovalprocessid, inputreimbursementlocationid, inputdescription, inputcost, pk_gradeformat, pk_eventtype, inputworkjustification, inputattachment, inputapprovaldocument, pk_approval, inputtimemissed) RETURNING reimbursementid INTO pk;
 END;
 /
-
+ALTER TABLE employee ADD CONSTRAINT unique_email UNIQUE (email);
 --Stored Procedure for retrieving all reimbursement information by employeeid
 CREATE OR REPLACE PROCEDURE sp_select_reimbursement (inputemployeeid IN INTEGER, rs OUT SYS_REFCURSOR)
 AS 

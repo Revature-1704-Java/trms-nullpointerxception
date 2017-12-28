@@ -12,8 +12,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.bean.Employee;
-import com.revature.bean.Reimbursement;
+import com.revature.beans.Employee;
+import com.revature.beans.Reimbursement;
 import com.revature.util.ConnectionUtil;
 
 import oracle.jdbc.OracleTypes;
@@ -84,6 +84,9 @@ public class ReimbursementDAO {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		return reimbursementId;
@@ -113,6 +116,9 @@ public class ReimbursementDAO {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		return approvalProcessId;
@@ -150,6 +156,9 @@ public class ReimbursementDAO {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		return reimbursementLocationId;
@@ -217,6 +226,9 @@ public class ReimbursementDAO {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		return list;

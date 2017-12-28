@@ -10,7 +10,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.bean.Employee;
+import com.revature.beans.Employee;
 import com.revature.util.ConnectionUtil;
 
 public class EmployeeDAO {
@@ -83,6 +83,9 @@ public class EmployeeDAO {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		
@@ -110,14 +113,19 @@ public class EmployeeDAO {
 			ps.setString(2, password);
 			
 			rs = ps.executeQuery();
-			em = new Employee();
-			while(rs.next()) {
-				em.setEmployeeId(rs.getInt(1));
-				em.setEmail(rs.getString(2));
-				em.setFirstName(rs.getString(4));
-				em.setLastName(rs.getString(5));
-				em.setReportsTo(rs.getInt(6));
+			if (!rs.isBeforeFirst() ) {    
+			    return null;
+			} else {
+				em = new Employee();
+				while(rs.next()) {
+					em.setEmployeeId(rs.getInt(1));
+					em.setEmail(rs.getString(2));
+					em.setFirstName(rs.getString(4));
+					em.setLastName(rs.getString(5));
+					em.setReportsTo(rs.getInt(6));
+				}
 			}
+			
 			
 			rs.close();
 			ps.close();
@@ -128,6 +136,9 @@ public class EmployeeDAO {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		employeeDAO.getAllRolesForEmployee(em);
@@ -165,6 +176,9 @@ public class EmployeeDAO {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (ClassNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
 		}
 		
 		
@@ -178,6 +192,9 @@ public class EmployeeDAO {
 	 * @return All roles held by the employee in the form of a list of strings.
 	 */
 	public List<String> getAllRolesForEmployee(Employee e){
+		if(e == null) {
+			return null;
+		}
 		ArrayList<String> roles = new ArrayList<String>();
 		String sql  = "SELECT employeetype.employeetype FROM (SELECT * FROM employeerole WHERE employeeid=?) result INNER JOIN employeetype ON result.employeetypeid=employeetype.employeetypeid";
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
@@ -200,9 +217,13 @@ public class EmployeeDAO {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (ClassNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
 		}
 		
 		e.setRoles(roles);
+		
 		
 		return roles;
 		

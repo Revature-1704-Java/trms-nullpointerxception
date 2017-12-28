@@ -3,6 +3,7 @@ package com.revature.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.revature.bean.Employee;
+import com.revature.beans.Employee;
 import com.revature.util.ConnectionUtil;
 
 public class EmployeeDAOTest {
@@ -60,6 +61,9 @@ public class EmployeeDAOTest {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 	
@@ -78,7 +82,7 @@ public class EmployeeDAOTest {
 	@Test
 	public void getNonExistentEmployee() {
 		Employee e = employeeDAO.getEmployee("none", "none");
-		assertEquals(0,e.getEmployeeId());
+		assertNull(e);
 	}
 	
 	@Test 

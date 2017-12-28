@@ -26,14 +26,18 @@ public class ConnectionUtil {
 
 	}
 
-	public Connection getConnection() throws SQLException, IOException {
+	public Connection getConnection() throws SQLException, IOException, ClassNotFoundException{
 		Properties prop = new Properties();
-		InputStream in = new FileInputStream("connection.properties");
+		//InputStream in = new FileInputStream("connection.properties");
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream in = classLoader.getResourceAsStream("connection.properties");
 		prop.load(in);
 
 		String url = prop.getProperty("url");
 		String user = prop.getProperty("user");
 		String password = prop.getProperty("password");
+		
+		Class.forName("oracle.jdbc.driver.OracleDriver");
 
 		return DriverManager.getConnection(url, user, password);
 	}

@@ -10,7 +10,7 @@ public class ConnectionUtilTest {
 	
 
 	@Test
-	public void connectionTest() throws SQLException, IOException {
+	public void connectionTest() throws SQLException, IOException, ClassNotFoundException {
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		connectionUtil.getConnection();
 	}
