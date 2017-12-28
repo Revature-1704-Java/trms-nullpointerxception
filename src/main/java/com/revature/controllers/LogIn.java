@@ -48,10 +48,10 @@ public class LogIn extends HttpServlet {
 		EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
 		Employee e = employeeDAO.getEmployee(email, password);
 		if(e == null) {
-			//doGet(request, response);
+			doGet(request, response);
 		}else {
-			//RequestDispatcher rd = request.getRequestDispatcher("dashboard");
-			//rd.forward(request, response);
+			RequestDispatcher rd = request.getRequestDispatcher("dashboard");
+			rd.forward(request, response);
 		}
 		
 	}
