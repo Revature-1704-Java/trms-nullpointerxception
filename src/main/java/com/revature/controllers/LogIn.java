@@ -50,8 +50,8 @@ public class LogIn extends HttpServlet {
 		if(e == null) {
 			doGet(request, response);
 		}else {
-			RequestDispatcher rd = request.getRequestDispatcher("/dashboard");
-			rd.forward(request, response);
+			request.getSession().setAttribute("eid", e.getEmployeeId());
+			response.sendRedirect("dashboard");
 		}
 		
 	}
