@@ -35,12 +35,14 @@ CREATE TABLE employeetype (
 --Employee Create Table
 CREATE TABLE employee (
     employeeid INTEGER PRIMARY KEY,
-    email VARCHAR2(15) NOT NULL UNIQUE,
-    password VARCHAR2(26) NOT NULL,
+    email VARCHAR2(50) NOT NULL UNIQUE,
+    password VARCHAR2(40) NOT NULL,
     firstname VARCHAR2(15) NOT NULL,
     lastname VARCHAR2(15) NOT NULL,
     reportsto INTEGER,
     departmentid INTEGER NOT NULL,
+    salt VARCHAR2(40) NOT NULL,
+    hash VARCHAR2(16) NOT NULL,
     CONSTRAINT fk_reportsto FOREIGN KEY (reportsto) REFERENCES employee(employeeid),
     CONSTRAINT fk_departmentid FOREIGN KEY (departmentid) REFERENCES();
 );
@@ -239,7 +241,6 @@ BEGIN
     INSERT INTO reimbursement (employeeid, approvalprocessid, reimbursementlocationid, description, cost, gradeformatid, eventtypeid, workjustification, attachment, approvaldocument, approvalid, timemissed) VALUES (inputemployeeid, inputapprovalprocessid, inputreimbursementlocationid, inputdescription, inputcost, pk_gradeformat, pk_eventtype, inputworkjustification, inputattachment, inputapprovaldocument, pk_approval, inputtimemissed) RETURNING reimbursementid INTO pk;
 END;
 /
-ALTER TABLE employee ADD CONSTRAINT unique_email UNIQUE (email);
 --Stored Procedure for retrieving all reimbursement information by employeeid
 CREATE OR REPLACE PROCEDURE sp_select_reimbursement (inputemployeeid IN INTEGER, rs OUT SYS_REFCURSOR)
 AS 
@@ -250,3 +251,57 @@ BEGIN
 
 END;
 /
+
+
+
+
+--Password stuff
+CREATE OR REPLACE PACKAGE app_user_security AS
+
+    FUNCTION get_hash (p_email  IN  VARCHAR2, p_password  IN  VARCHAR2)
+        RETURN VARCHAR2;
+    
+    PROCEDURE add_user (p_email IN VARCHAR2, p_password IN VARCHAR2, p_firstname IN employee.firstname%TYPE, p_lastname IN employee.lastname%TYPE, p_reportsto IN employee.reportsto%TYPE, p_departmentid IN employee.departmentid%TYPE, p_salt IN VARCHAR ,pk OUT INTEGER);
+
+    FUNCTION valid_user (p_email  IN  VARCHAR2, p_password  IN  VARCHAR2)
+        RETURN SYS_REFCURSOR;
+
+END;
+/
+
+CREATE OR REPLACE PACKAGE BODY app_user_security AS
+
+    FUNCTION get_hash(p_email IN VARCHAR2, p_password IN VARCHAR2)
+    RETURN VARCHAR2 AS l_salt VARCHAR2(20);
+    BEGIN
+        SELECT salt INTO l_salt FROM employee WHERE email=p_email;
+        RETURN DBMS_CRYPTO.HASH(UTL_RAW.CAST_TO_RAW(UPPER(p_email) || l_salt || UPPER(p_password)), DBMS_CRYPTO.HASH_SH1);
+    END;
+        
+    PROCEDURE add_user (p_email IN VARCHAR2, p_password IN VARCHAR2, p_firstname IN employee.firstname%TYPE, p_lastname IN employee.lastname%TYPE, p_reportsto IN employee.reportsto%TYPE, p_departmentid IN employee.departmentid%TYPE, p_salt IN VARCHAR, pk OUT INTEGER) 
+    AS
+    BEGIN
+        SAVEPOINT savepoint;
+  
+        INSERT INTO employee (email,firstname,lastname,reportsto,departmentid, salt, hash) VALUES (p_email, p_firstname, p_lastname, p_reportsto, p_departmentid, p_salt, app_user_security.get_hash(p_email,p_password)) RETURNING employeeid INTO pk;
+        COMMIT;
+        
+--        EXCEPTION
+--        WHEN OTHERS THEN
+--            pk := 0;
+--        ROLLBACK TO SAVEPOINT savepoint;
+    END;
+      
+    FUNCTION valid_user (p_email IN VARCHAR2, p_password IN VARCHAR2)
+    RETURN SYS_REFCURSOR AS c SYS_REFCURSOR;
+    BEGIN
+        OPEN c FOR
+        SELECT * FROM employee WHERE email=p_email AND hash=app_user_security.get_hash(p_email, p_password);
+        RETURN c;
+    END;
+END;
+/
+
+
+
+

@@ -1,6 +1,7 @@
 package com.revature.dao;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import com.revature.beans.Employee;
 import com.revature.util.ConnectionUtil;
+
+import oracle.jdbc.OracleTypes;
 
 public class EmployeeDAO {
 
@@ -43,14 +46,14 @@ public class EmployeeDAO {
 	 * @param firstName The first name of the new employee.
 	 * @param lastName The last name of the new employee.
 	 * @param reportsTo The id of the employee whom the new employee would directly work under.
-	 * @return true if the stored procedure ran successfully. false if it didn't.
+	 * @return The employeeid of the employe that was created. 0 if the employee could not be created
 	 */
-	public boolean create(String email, String password, String firstName, String lastName, Integer reportsTo, Integer departmentId) {
+	public int create(String email, String password, String firstName, String lastName, Integer reportsTo, Integer departmentId) {
 
 		
-		boolean isSuccessful = false;
+		int pk = 0;
 		
-		String sql = "{call sp_insert_employee (?, ?, ?, ?, ?, ?, ?)}";
+		String sql = "{call app_user_security.add_user (?, ?, ?, ?, ?, ?, ?, ?)}";
 		
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		
@@ -61,7 +64,7 @@ public class EmployeeDAO {
 			callableStatement.setString(2, password);
 			callableStatement.setString(3, firstName);
 			callableStatement.setString(4, lastName);
-			
+		
 			if(reportsTo == null) {
 				callableStatement.setNull(5, Types.INTEGER);
 			}else {
@@ -69,11 +72,14 @@ public class EmployeeDAO {
 			}
 			callableStatement.setInt(6, departmentId);
 			
-			callableStatement.registerOutParameter(7, Types.VARCHAR);
+			callableStatement.setBytes(7, new SecureRandom().generateSeed(10));
+			
+			callableStatement.registerOutParameter(8, Types.INTEGER);
 			
 			callableStatement.execute();
 			
-			isSuccessful = callableStatement.getBoolean(7);
+			pk = callableStatement.getInt(8);
+			
 			
 			callableStatement.close();
 			
@@ -90,7 +96,7 @@ public class EmployeeDAO {
 		
 		
 		
-		return isSuccessful;
+		return pk;
 		
 	}
 
@@ -101,18 +107,20 @@ public class EmployeeDAO {
 	 * @return The employee
 	 */
 	public Employee getEmployee(String email, String password) {
-		String sql = "SELECT * FROM employee WHERE email=? AND password=?";
+		String sql = "{? = call app_user_security.valid_user (?, ?)}";
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
-		PreparedStatement ps = null;
+		CallableStatement cs = null;
 		ResultSet rs = null;
 		Employee em = null;
 		try (Connection conn = connectionUtil.getConnection()){
 		
-			ps = conn.prepareStatement(sql);
-			ps.setString(1, email);
-			ps.setString(2, password);
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, OracleTypes.CURSOR);
+			cs.setString(2, email);
+			cs.setString(3, password);
 			
-			rs = ps.executeQuery();
+			cs.execute();
+			rs = (ResultSet) cs.getObject(1);
 			if (!rs.isBeforeFirst() ) {    
 			    return null;
 			} else {
@@ -128,7 +136,7 @@ public class EmployeeDAO {
 			
 			
 			rs.close();
-			ps.close();
+			cs.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -29,7 +29,7 @@ public class Dashboard extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.html");
+		RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
 		rd.forward(request, response);
 	}
 

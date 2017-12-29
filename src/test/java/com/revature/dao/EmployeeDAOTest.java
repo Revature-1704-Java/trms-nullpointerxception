@@ -69,7 +69,7 @@ public class EmployeeDAOTest {
 	
 	@Test
 	public void insertEmployee() {
-		assertTrue(employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null, 1));
+		assertTrue(employeeDAO.create("Test", "TestPassword", "Steven", "Sagun", null, 1) != 0);
 	}
 	
 	@Test
