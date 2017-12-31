@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.revature.beans.*,java.util.ArrayList"%>
+    pageEncoding="ISO-8859-1" import="com.revature.beans.*,java.util.ArrayList,java.util.List"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -15,15 +15,16 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12">
-					<h1>Success!</h1>
-					<h3>
-						<%! Employee e; %>
-						<% e = (Employee) session.getAttribute("employee"); %>
-						<%= e.getEmployeeId() %>
-					</h3>
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createReimbursement">Submit New Reimbursement Form</button>
-					
-					
+					<%! List<Reimbursement> reimbursements; %>
+					<% reimbursements = (List) request.getAttribute("reimbursements"); %>
+					<% for(int i = 0; i < reimbursements.size(); i++){ %>
+						<div class="card">
+							<div class="card-body">
+								<%= reimbursements.get(i).getDescription() %>
+							</div>
+						</div>
+					<% } %>
 				</div>
 			</div>
 		</div>
@@ -40,7 +41,7 @@
 						<div class="container">
 							<div class="row">
 								<div class="col-sm-12">
-									<form id="newReimbursement" onsubmit="submitNewForm">
+									<form id="newReimbursement" enctype="multipart/form-data" name="newReimbursement">
 										<div class="form-group">
 											<label for="formCost">Reimbursement Request Amount</label>
 											$<input name="cost" class="form-control" type="number" min="0" id="formCost" aria-describedby="formCostSmall" placeholder="Ex. 249.99" required>
@@ -135,25 +136,12 @@
 		</div>
 
 		
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+		<script src="js/dashboard.js"></script>
 		<script>
 		$(function(){
-			
-			function submitNewForm(){
-				$.ajax({
-					url:'newreimbursement',
-					method: 'POST',
-					data: new FormData(document.getElementById('newReimbursment')),
-					cache: false,
-					contentType: false,
-					processData: false,
-					success: function(data, textStatus, jqXHR){
-						console.log('Success');
-					}
-				});
-			}
 			
 			
 			function updateProjectedReimbursement(){
@@ -164,7 +152,6 @@
 				<% for(int i = 0; i < eventTypes.size(); i++){ %>
 					eventTypes["<%= eventTypes.get(i).getEventType() %>"] = <%= eventTypes.get(i).getCoverage() %>;
 				<% } %>
-				console.log("test");
 				projectedReimbursement.val((cost.val() * eventTypes[eventType.val()]).toFixed(2));
 				
 				

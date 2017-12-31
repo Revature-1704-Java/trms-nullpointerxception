@@ -39,10 +39,10 @@ public class ReimbursementDAO {
 		}
 	}
 	
-	public int create(Employee em, String description, double cost, String gradeFormat, String eventType, String workJustification, Blob attachment, Blob approvalDocument, int timeMissed, java.util.Date startDate, String address, String city, String zip, String country) {
+	public int create(Employee em, String description, double cost, String gradeFormat, String eventType, String workJustification, byte[] attachment, byte[] approvalDocument, int timeMissed, java.util.Date startDate, String address, String city, String zip, String country) {
 		
 		String sql = "{call sp_insert_reimbursement (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
-		
+		System.out.println(eventType);
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		CallableStatement cs = null;
 		int reimbursementId = 0;
@@ -52,7 +52,6 @@ public class ReimbursementDAO {
 			int reimbursementLocationId = createReimbursementLocation(startDate, address, city, zip, country);
 			
 			cs = conn.prepareCall(sql);
-			
 			cs.setInt(1, em.getEmployeeId());
 			cs.setInt(2, approvalProcessId);
 			cs.setInt(3, reimbursementLocationId);
@@ -61,16 +60,20 @@ public class ReimbursementDAO {
 			cs.setString(6, gradeFormat);
 			cs.setString(7, eventType);
 			cs.setString(8, workJustification);
-			if(attachment == null) {
+			if(attachment.length == 0) {
 				cs.setNull(9, Types.BLOB);
 			}else {
-				cs.setBlob(9, attachment);
+				Blob bAttachment = conn.createBlob();
+				bAttachment.setBytes(attachment.length, attachment);
+				cs.setBlob(9, bAttachment);
 			}
 			
-			if(approvalDocument == null) {
+			if(approvalDocument.length == 0) {
 				cs.setNull(10, Types.BLOB);
 			}else {
-				cs.setBlob(10, approvalDocument);
+				Blob bApprovalDocument = conn.createBlob();
+				bApprovalDocument.setBytes(approvalDocument.length, approvalDocument);
+				cs.setBlob(10, bApprovalDocument);
 			}
 			
 			cs.setInt(11, timeMissed);

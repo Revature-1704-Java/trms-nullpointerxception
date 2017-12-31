@@ -53,7 +53,6 @@ public class Dashboard extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
 			rd.forward(request, response);
 		}
-		System.out.println(request.getSession().getId());
 		
 	}
 

@@ -200,12 +200,11 @@ END;
 
 
 --Stored Procudure for inserting Employee
-CREATE OR REPLACE PROCEDURE sp_insert_employee(inputemail IN employee.email%TYPE, inputpassword IN employee.password%TYPE, inputfirstname IN employee.firstname%TYPE, inputlastname IN employee.lastname%TYPE, inputreportsto IN employee.reportsto%TYPE, inputdepartmentid IN employee.departmentid%TYPE, issuccessful OUT VARCHAR2)
+CREATE OR REPLACE PROCEDURE sp_insert_employee(inputemail IN employee.email%TYPE, inputpassword IN employee.password%TYPE, inputfirstname IN employee.firstname%TYPE, inputlastname IN employee.lastname%TYPE, inputreportsto IN employee.reportsto%TYPE, inputdepartmentid IN employee.departmentid%TYPE, pk OUT INTEGER)
 AS
 BEGIN
     SAVEPOINT savepoint;
     INSERT INTO employee (email,password,firstname,lastname,reportsto, departmentid)VALUES(inputemail,inputpassword,inputfirstname,inputlastname,inputreportsto, inputdepartmentid);
-    isSuccessful := 1;
     COMMIT;
     
     EXCEPTION
