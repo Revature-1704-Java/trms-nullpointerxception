@@ -44,9 +44,8 @@ CREATE TABLE employee (
     salt VARCHAR2(40) NOT NULL,
     hash VARCHAR2(16) NOT NULL,
     CONSTRAINT fk_reportsto FOREIGN KEY (reportsto) REFERENCES employee(employeeid),
-    CONSTRAINT fk_departmentid FOREIGN KEY (departmentid) REFERENCES();
+    CONSTRAINT fk_departmentid FOREIGN KEY (departmentid) REFERENCES department(departmentid)
 );
-
 --Employee Role Create Table
 CREATE TABLE employeerole(
     employeeroleid INTEGER PRIMARY KEY,
@@ -252,6 +251,23 @@ BEGIN
 END;
 /
 
+--Stored Procedure for retrieving a single reimbursement based on its id
+CREATE OR REPLACE PROCEDURE sp_select_one_reimbursement (p_reimbursementid IN INTEGER, rs OUT SYS_REFCURSOR)
+AS
+BEGIN
+    OPEN rs FOR
+    SELECT * FROM (((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) WHERE reimbursement.reimbursementid=p_reimbursementid ORDER BY employeecreationdate, employeecreationtime;
+END;
+/
+
+--Stored Procedure for retrieving all reimbursement from underling. Used by supervisor
+CREATE OR REPLACE PROCEDURE sp_select_all_underling_reim (p_employeeid IN INTEGER, rs OUT SYS_REFCURSOR)
+AS
+BEGIN
+    OPEN rs FOR
+    SELECT * FROM ((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) INNER JOIN employee ON reimbursement.employeeid=employee.employeeid) WHERE employee.reportsto=p_employeeid ORDER BY employeecreationdate, employeecreationtime;
+END;
+/
 
 
 

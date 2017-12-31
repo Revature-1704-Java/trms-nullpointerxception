@@ -10,6 +10,7 @@ public class Employee implements Serializable {
 	private String firstName;
 	private String lastName;
 	private int reportsTo;
+	private int departmentId;
 	private List<String> roles;
 
 	public Employee() {
@@ -55,7 +56,7 @@ public class Employee implements Serializable {
 	public void setReportsTo(int reportsTo) {
 		this.reportsTo = reportsTo;
 	}
-	
+
 	public List<String> getRoles() {
 		return roles;
 	}
@@ -63,6 +64,13 @@ public class Employee implements Serializable {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-	
+
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
+	}
 
 }

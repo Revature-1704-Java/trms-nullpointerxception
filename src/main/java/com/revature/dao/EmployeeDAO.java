@@ -128,9 +128,10 @@ public class EmployeeDAO {
 				while(rs.next()) {
 					em.setEmployeeId(rs.getInt(1));
 					em.setEmail(rs.getString(2));
-					em.setFirstName(rs.getString(4));
-					em.setLastName(rs.getString(5));
-					em.setReportsTo(rs.getInt(6));
+					em.setFirstName(rs.getString(3));
+					em.setLastName(rs.getString(4));
+					em.setReportsTo(rs.getInt(5));
+					em.setDepartmentId(rs.getInt(6));
 				}
 			}
 			
