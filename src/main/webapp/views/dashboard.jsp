@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.revature.beans.*,java.util.ArrayList,java.util.List,java.text.NumberFormat"%>
+    pageEncoding="ISO-8859-1" import="com.revature.beans.*,java.util.ArrayList,java.util.List,java.text.NumberFormat,java.text.DateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -20,7 +20,8 @@
 					<%! List<Reimbursement> reimbursements; %>
 					<% reimbursements = (List) request.getAttribute("reimbursements"); %>
 					<% NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(); %>
-					<% for(int i = 0; i < reimbursements.size(); i++){ %>
+					<% DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM); %>
+					<% for(int i = reimbursements.size() - 1; i >= 0; i--){ %>
 						<div class="card">
 							<div class="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= reimbursements.get(i).getReimbursementId() %>" aria-expanded="false" aria-controls='collapse<%= reimbursements.get(i).getReimbursementId() %>' role="tab" id="heading<%= reimbursements.get(i).getReimbursementId() %>">
 								<h5 class="mb-0">

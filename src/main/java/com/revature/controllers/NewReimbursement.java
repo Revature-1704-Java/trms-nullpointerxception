@@ -3,6 +3,7 @@ package com.revature.controllers;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Date;
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
@@ -48,15 +49,10 @@ public class NewReimbursement extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Map<String, String[]> p = request.getParameterMap();
-		for(Map.Entry<String, String[]> entry : p.entrySet()) {
-			System.out.println(entry.getKey());
-			System.out.println(Arrays.toString(entry.getValue()));
-		}
 		
 		ReimbursementDAO reimbursementDAO = ReimbursementDAO.getInstance();
 		Employee employee = (Employee) request.getSession().getAttribute("employee");
-	
+		DateFormat dateFormat = DateFormat.getDateInstance();
 		double cost = Double.parseDouble(request.getParameter("cost"));
 		Integer timeMissed;
 		try{
@@ -76,7 +72,36 @@ public class NewReimbursement extends HttpServlet {
 		byte[] approvalDocument = request.getPart("approvalDocument").getInputStream().readAllBytes();		
 		
 		int pk = reimbursementDAO.create(employee, request.getParameter("description"), cost, request.getParameter("gradeFormat"), request.getParameter("eventType"), request.getParameter("workJustification"), attachment, approvalDocument, timeMissed, startDate, request.getParameter("address"), request.getParameter("city"), request.getParameter("zip"), request.getParameter("country"));
-		
+		Reimbursement reimbursement = reimbursementDAO.getById(pk);
+		JSONObject json = new JSONObject();
+		json.put("reimbursementId", reimbursement.getReimbursementId());
+		json.put("status", reimbursement.getStatus());
+		json.put("coverage", reimbursement.getCoverage());
+		json.put("cost", reimbursement.getCost());
+		json.put("employeeCreationTime", reimbursement.getEmployeeCreationTime().toLocaleString());
+		json.put("eventType", reimbursement.getEventType());
+		json.put("gradeFormat", reimbursement.getDefaultPassingGrade());
+		if(reimbursement.getSupervisorApproveDate() == null) {
+			json.put("supervisorApprovalDate", "--");
+		}else {
+			json.put("supervisorApprovalDate", reimbursement.getSupervisorApproveDate().toLocaleString());
+		}
+		if(reimbursement.getDepartmentHeadApproveDate() == null) {
+			json.put("departmentHeadApprovalDate", "--");
+		}else {
+			json.put("departmentHeadApprovalDate", reimbursement.getDepartmentHeadApproveDate().toLocaleString());
+		}
+		json.put("adjustedReimbursement", reimbursement.getAdjustedCost());
+		json.put("description", reimbursement.getDescription());
+		json.put("workJustification", reimbursement.getWorkJustification());
+		json.put("workMissed", reimbursement.getTimeMissed());
+		json.put("address", reimbursement.getAddress());
+		json.put("city", reimbursement.getCity());
+		json.put("zip", reimbursement.getZip());
+		json.put("country", reimbursement.getCountry());
+		json.put("denyReason", reimbursement.getDenyReason());
+		json.put("inflatedReimbursementReason", reimbursement.getInflatedReimbursementReason());
+		response.getWriter().print(json.toString());
 	}
 
 }
