@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.revature.beans.*,java.util.ArrayList,java.util.List"%>
+    pageEncoding="ISO-8859-1" import="com.revature.beans.*,java.util.ArrayList,java.util.List,java.text.NumberFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -16,15 +16,130 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createReimbursement">Submit New Reimbursement Form</button>
+					<div id="accordion" role="tablist" aria-multiselectable="true">
 					<%! List<Reimbursement> reimbursements; %>
 					<% reimbursements = (List) request.getAttribute("reimbursements"); %>
+					<% NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(); %>
 					<% for(int i = 0; i < reimbursements.size(); i++){ %>
 						<div class="card">
-							<div class="card-body">
-								<%= reimbursements.get(i).getDescription() %>
+							<div class="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= reimbursements.get(i).getReimbursementId() %>" aria-expanded="false" aria-controls='collapse<%= reimbursements.get(i).getReimbursementId() %>' role="tab" id="heading<%= reimbursements.get(i).getReimbursementId() %>">
+								<h5 class="mb-0">
+									ID: <%= reimbursements.get(i).getReimbursementId() %> Projected Reimbursement: <%= currencyFormat.format(reimbursements.get(i).getCost() * reimbursements.get(i).getCoverage()) %> Status: <%= reimbursements.get(i).getStatus() %>
+								</h5>
+							</div>
+							<div id="collapse<%= reimbursements.get(i).getReimbursementId() %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= reimbursements.get(i).getReimbursementId() %>">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-sm-12">
+											Submitted: <%= reimbursements.get(i).getEmployeeCreationTime().toLocaleString() %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-3">
+											Cost: <%= currencyFormat.format(reimbursements.get(i).getCost()) %>
+										</div>
+										<div class="col-sm-3">
+											Event Type: <%= reimbursements.get(i).getEventType() %>
+										</div>
+										<div class="col-sm-3">
+											Grade Format: <%= reimbursements.get(i).getFormat() %>
+										</div>
+										<div class="col-sm-3">
+											Default Passing Grade: <%= reimbursements.get(i).getDefaultPassingGrade() %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-6">
+											<% if(reimbursements.get(i).getSupervisorApproveDate() == null){ %>
+											Supervisor Approval Date: --
+											<% }else{ %>
+											Supervisor Approval Date: <%= reimbursements.get(i).getSupervisorApproveDate().toLocaleString() %>
+											<% } %>
+										</div>
+										<div class="col-sm-6">
+											<% if(reimbursements.get(i).getDepartmentHeadApproveDate() == null){ %>
+											Department Head Approval Date: --
+											<% }else{ %>
+											Department Head Approval Date: <%= reimbursements.get(i).getDepartmentHeadApproveDate().toLocaleString() %>
+											<% } %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-6">	
+											<% if(reimbursements.get(i).getAdjustedCost() == 0){ %>
+											Adjusted Reimbursement: --
+											<% }else{ %>
+											Adjusted Reimbursement: <%= reimbursements.get(i).getAdjustedCost() %>
+											<% } %>
+										</div>
+										<div class="col-sm-6">
+										
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-12">
+											Description:<br>
+											<%= reimbursements.get(i).getDescription() %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-12">
+											Work Justification:<br>
+											<%= reimbursements.get(i).getWorkJustification() %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-12">
+											<% if(reimbursements.get(i).getTimeMissed() == 0){ %>
+											Time Missed: --
+											<% }else{ %>
+											Time Missed: <%= reimbursements.get(i).getTimeMissed()/24 %>d   <%= reimbursements.get(i).getTimeMissed() % 24%>h
+											<% } %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-3">
+											Address: <%= reimbursements.get(i).getAddress() %>
+										</div>
+										<div class="col-sm-3">
+											City: <%= reimbursements.get(i).getCity() %>
+										</div>
+										<div class="col-sm-3">
+											Zip: <%= reimbursements.get(i).getZip() %>
+										</div>
+										<div class="col-sm-3">
+											Country: <%= reimbursements.get(i).getCountry() %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-6">
+											<% if(reimbursements.get(i).getDenyReason() == null){ %>
+											Deny Reason: --
+											<% }else{ %>
+											Deny Reason: <%= reimbursements.get(i).getDenyReason() %>
+											<% } %>
+										</div>
+										<div class="col-sm-6">
+											<% if(reimbursements.get(i).getInflatedReimbursementReason() == null){ %>
+											Inflated Reimbursement Reason: --
+											<% }else{ %>
+											Inflated Reimbursement Reason: <%= reimbursements.get(i).getInflatedReimbursementReason() %>
+											<% } %>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-					<% } %>
+					<% } %>				
+					</div>
 				</div>
 			</div>
 		</div>
