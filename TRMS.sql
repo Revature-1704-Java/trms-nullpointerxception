@@ -269,6 +269,17 @@ BEGIN
 END;
 /
 
+--Stored Procedure for updating status of a reimbursement
+CREATE OR REPLACE PROCEDURE sp_update_deny_supervisor_reim (p_id IN INTEGER, p_supervisor IN INTEGER, p_approval IN VARCHAR, p_reason IN VARCHAR)
+AS
+BEGIN
+    UPDATE reimbursement SET supervisorid=p_supervisor, approvalid=(SELECT approvalid FROM approval WHERE status=p_approval), denyreason=p_reason WHERE reimbursementid=p_id;
+    COMMIT;
+END;
+/
+
+--Stored Procedure for getting all reimbursements by department
+
 
 
 --Password stuff

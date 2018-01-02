@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.revature.beans.Employee;
+import com.revature.dao.ReimbursementDAO;
+
 /**
  * Servlet implementation class UpdateStatus
  */
@@ -35,7 +38,9 @@ public class UpdateStatus extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//doGet(request, response);
-		
+		ReimbursementDAO reimbursementDAO = ReimbursementDAO.getInstance();
+		reimbursementDAO.updateStatus(Integer.parseInt(request.getParameter("reimbursementId")), ((Employee)request.getSession().getAttribute("employee")).getEmployeeId() ,request.getParameter("approval"), request.getParameter("reason"), request.getParameter("role"));
+		response.sendRedirect("dashboard?view=supervisor");
 	}
 
 }

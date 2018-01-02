@@ -9,7 +9,7 @@
 	
 	    <!-- Bootstrap CSS -->
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/dashboard-supervisor.css">
+		<link rel="stylesheet" href="static/css/dashboard.css">
 	</head>
 	<body>
 		<div class="container">
@@ -20,7 +20,7 @@
 					<% if(employee.getRoles().contains("Employee")){ %>
 						<li class="list-group-item">
 							<form action="dashboard" method="GET">
-							  	<input name="role" type="hidden" value="employee">
+							  	<input name="view" type="hidden" value="employee">
 							  	<button class="btn btn-primary" type="submit">Employee View</button>
 							 </form>
 						</li>
@@ -28,7 +28,7 @@
 					<% if(employee.getRoles().contains("Supervisor")){ %>
 					<li class="list-group-item">
 							<form action="dashboard" method="GET">
-					  			<input name="role" type="hidden" value="supervisor">
+					  			<input name="view" type="hidden" value="supervisor">
 					  			<button class="btn btn-primary" type="submit">Supervisor View</button>
 					 		 </form>
 						</li>
@@ -36,13 +36,13 @@
 					<% } %>
 					<% if(employee.getRoles().contains("Department Head")){ %>
 					  <form action="dashboard" method="GET">
-					  	<input name="role" type="hidden" value="departmentHead">
+					  	<input name="view" type="hidden" value="departmentHead">
 					  	<button class="btn btn-primary" type="submit">Department Head View</button>
 					  </form>
 					<% } %>
 					<% if(employee.getRoles().contains("Benefits Coordinator")){ %>
 					  <form action="dashboard" method="GET">
-					  	<input name="role" type="hidden" value="benefitsCoordinator">
+					  	<input name="view" type="hidden" value="benefitsCoordinator">
 					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
 					  </form>
 					<% } %>
@@ -176,8 +176,9 @@
 									<br>
 									<div class="row">
 										<div class="col-sm-12">
+											<input type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
 											<button id="approve" type="button" class="btn btn-success">Approve</button>
-											<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
+											<button id="deny" type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
 										</div>
 									</div>
 									<div class="row">
@@ -203,9 +204,12 @@
 		        		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		      		</div>
 		      		<div class="modal-body">
-		        		<form id="denyForm">
+		        		<form action="updatestatus" method="POST" id="denyForm">
 		        			<div class="form-group">
-		        				<textarea class="form-control" name="reasonToDeny" id="reasonToDeny" max=500></textarea>
+		        				<input id="reimbursementId" type="hidden" name="reimbursementId" value="">
+		        				<input type="hidden" name="role" value="supervisor">
+		        				<input type="hidden" name="approval" value="DENIED">
+		        				<textarea class="form-control" name="reason" id="reasonToDeny" max=500></textarea>
 		        				<small for="reasonToDeny">Required. Max 500 characters.</small>
 		        			</div>
 		        			<button type="submit" class="btn btn-danger">Submit</button>
@@ -221,6 +225,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-		<script src="js/dashboard-supervisor.js"></script>
+		<script src="static/js/dashboard-supervisor.js"></script>
 	</body>
 </html>

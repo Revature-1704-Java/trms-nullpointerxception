@@ -9,7 +9,7 @@
 	
 	    <!-- Bootstrap CSS -->
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/dashboard.css">
+		<link rel="stylesheet" href="static/css/dashboard.css">
 	</head>
 	<body>
 		<div class="container">
@@ -20,7 +20,7 @@
 					<% if(employee.getRoles().contains("Employee")){ %>
 						<li class="list-group-item">
 							<form action="dashboard" method="GET">
-							  	<input name="role" type="hidden" value="employee">
+							  	<input name="view" type="hidden" value="employee">
 							  	<button class="btn btn-primary" type="submit">Employee View</button>
 							 </form>
 						</li>
@@ -28,7 +28,7 @@
 					<% if(employee.getRoles().contains("Supervisor")){ %>
 					<li class="list-group-item">
 							<form action="dashboard" method="GET">
-					  			<input name="role" type="hidden" value="supervisor">
+					  			<input name="view" type="hidden" value="supervisor">
 					  			<button class="btn btn-primary" type="submit">Supervisor View</button>
 					 		 </form>
 						</li>
@@ -36,13 +36,13 @@
 					<% } %>
 					<% if(employee.getRoles().contains("Department Head")){ %>
 					  <form action="dashboard" method="GET">
-					  	<input name="role" type="hidden" value="departmentHead">
+					  	<input name="view" type="hidden" value="departmentHead">
 					  	<button class="btn btn-primary" type="submit">Department Head View</button>
 					  </form>
 					<% } %>
 					<% if(employee.getRoles().contains("Benefits Coordinator")){ %>
 					  <form action="dashboard" method="GET">
-					  	<input name="role" type="hidden" value="benefitsCoordinator">
+					  	<input name="view" type="hidden" value="benefitsCoordinator">
 					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
 					  </form>
 					<% } %>
@@ -290,7 +290,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-		<script src="js/dashboard.js"></script>
+		<script src="static/js/dashboard.js"></script>
 		<script>
 		$(function(){
 			

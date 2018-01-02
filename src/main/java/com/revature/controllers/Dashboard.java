@@ -40,7 +40,7 @@ public class Dashboard extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("role") != null && request.getParameter("role").equals("employee")) {
+		if(request.getParameter("view") != null && request.getParameter("view").equals("employee")) {
 			Employee e = (Employee) request.getSession().getAttribute("employee");
 			List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
 			List<EventType> eventTypes = reimbursementDAO.getEventTypes();
@@ -51,7 +51,7 @@ public class Dashboard extends HttpServlet {
 			request.setAttribute("gradeFormats", gradeFormats);
 			RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
 			rd.forward(request, response);
-		}else if(request.getParameter("role") != null && request.getParameter("role").equals("supervisor")) {
+		}else if(request.getParameter("view") != null && request.getParameter("view").equals("supervisor")) {
 			Employee e = (Employee) request.getSession().getAttribute("employee");
 			List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromUnderlings(e.getEmployeeId());
 			request.setAttribute("employee", e);
