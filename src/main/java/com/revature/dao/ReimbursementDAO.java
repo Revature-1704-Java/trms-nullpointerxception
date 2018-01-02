@@ -468,17 +468,29 @@ public class ReimbursementDAO {
 		
 	}
 	
-	public List<EmployeeReimbursement> getAllByDepartmentId(int id){
-		
-	}
-	
 
 	public void updateStatus(int id, int userId , String approval, String reason, String role) {
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		CallableStatement cs = null;
 		if(role.equals("supervisor")) {
 			if(approval.equals("APPROVED")) {
-				
+				String sql = "{call sp_update_approve_superv_reim (?,?)}";
+				try(Connection conn = connectionUtil.getConnection()){
+					cs = conn.prepareCall(sql);
+					cs.setInt(1, id);
+					cs.setInt(2, userId);
+					cs.execute();
+					cs.close();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}else {
 				
 				String sql = "{call sp_update_deny_supervisor_reim (?,?,?,?)}";

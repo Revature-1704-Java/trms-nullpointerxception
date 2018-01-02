@@ -7,20 +7,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.revature.beans.Employee;
-import com.revature.dao.ReimbursementDAO;
-
 /**
- * Servlet implementation class UpdateStatus
+ * Servlet implementation class Logout
  */
-@WebServlet("/updatestatus")
-public class UpdateStatus extends HttpServlet {
+@WebServlet("/logout")
+public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UpdateStatus() {
+    public Logout() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,20 +27,15 @@ public class UpdateStatus extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getSession().invalidate();
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//doGet(request, response);
-		ReimbursementDAO reimbursementDAO = ReimbursementDAO.getInstance();
-		reimbursementDAO.updateStatus(Integer.parseInt(request.getParameter("reimbursementId")), ((Employee)request.getSession().getAttribute("employee")).getEmployeeId() ,request.getParameter("approval"), request.getParameter("reason"), request.getParameter("role"));
-		if(request.getParameter("role").equals("supervisor")) {
-			response.sendRedirect("dashboard?view=supervisor");
-		}
-		
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

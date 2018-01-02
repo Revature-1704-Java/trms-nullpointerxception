@@ -46,7 +46,9 @@
 					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
 					  </form>
 					<% } %>
-					
+						<li class="list-group-item">
+							<button id="logout" type="button" class="btn btn-primary">Logout</button>
+						</li>
 					</ul>
 				</div>
 				<div class="col-sm-9">

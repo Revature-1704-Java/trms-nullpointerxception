@@ -106,6 +106,16 @@ $(function(){
 		xhr.send(data);
 		
 	});
+	
+	$('#logout').click(function(){
+		$.ajax({
+			url:'logout',
+			method:'GET',
+			success: function(){
+				location.reload(true);
+			}
+		});
+	});
 
 });
 

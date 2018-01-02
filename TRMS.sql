@@ -279,7 +279,14 @@ END;
 /
 
 --Stored Procedure for getting all reimbursements by department
-
+CREATE OR REPLACE PROCEDURE sp_update_approve_superv_reim (p_id IN INTEGER, p_supervisor IN INTEGER)
+AS apid INTEGER;
+BEGIN
+    UPDATE reimbursement SET supervisorid=p_supervisor, approvalid=(SELECT approvalid FROM approval WHERE status='PENDING APPROVAL FROM DEPARTMENT HEAD') WHERE reimbursementid=p_id RETURNING approvalprocessid INTO apid;
+    UPDATE approvalprocess SET supervisorapprovedate=CURRENT_DATE;
+    COMMIT;
+END;
+/
 
 
 --Password stuff

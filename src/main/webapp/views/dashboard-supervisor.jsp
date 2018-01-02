@@ -46,7 +46,9 @@
 					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
 					  </form>
 					<% } %>
-					
+						<li class="list-group-item">
+							<button id="logout" type="button" class="btn btn-primary">Logout</button>
+						</li>
 					</ul>
 				</div>
 				<div class="col-sm-9">
@@ -177,13 +179,13 @@
 									<div class="row">
 										<div class="col-sm-12">
 											<input type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
-											<button id="approve" type="button" class="btn btn-success">Approve</button>
+											<form action="updatestatus" method="POST">
+												<input id="reimbursementId" type="hidden" name="reimbursementId" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
+												<input type="hidden" name="role" value="supervisor">
+												<input name="approval" type="hidden" value="APPROVED">
+												<button id="approve" type="submit" class="btn btn-success">Approve</button>
+											</form>
 											<button id="deny" type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-sm-12">
-											
 										</div>
 									</div>
 									<% } %>

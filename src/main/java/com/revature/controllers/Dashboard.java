@@ -40,37 +40,40 @@ public class Dashboard extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("view") != null && request.getParameter("view").equals("employee")) {
-			Employee e = (Employee) request.getSession().getAttribute("employee");
-			List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
-			List<EventType> eventTypes = reimbursementDAO.getEventTypes();
-			List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
-			request.setAttribute("employee", e);
-			request.setAttribute("reimbursements", reimbursements);
-			request.setAttribute("eventTypes", eventTypes);
-			request.setAttribute("gradeFormats", gradeFormats);
-			RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
-			rd.forward(request, response);
-		}else if(request.getParameter("view") != null && request.getParameter("view").equals("supervisor")) {
-			Employee e = (Employee) request.getSession().getAttribute("employee");
-			List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromUnderlings(e.getEmployeeId());
-			request.setAttribute("employee", e);
-			request.setAttribute("employeeReimbursements", employeeReimbursements);
-			RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-supervisor.jsp");
-			rd.forward(request, response);
+		if(request.getSession().getAttribute("employee") != null) {
+			if(request.getParameter("view") != null && request.getParameter("view").equals("employee")) {
+				Employee e = (Employee) request.getSession().getAttribute("employee");
+				List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
+				List<EventType> eventTypes = reimbursementDAO.getEventTypes();
+				List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
+				request.setAttribute("employee", e);
+				request.setAttribute("reimbursements", reimbursements);
+				request.setAttribute("eventTypes", eventTypes);
+				request.setAttribute("gradeFormats", gradeFormats);
+				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
+				rd.forward(request, response);
+			}else if(request.getParameter("view") != null && request.getParameter("view").equals("supervisor")) {
+				Employee e = (Employee) request.getSession().getAttribute("employee");
+				List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromUnderlings(e.getEmployeeId());
+				request.setAttribute("employee", e);
+				request.setAttribute("employeeReimbursements", employeeReimbursements);
+				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-supervisor.jsp");
+				rd.forward(request, response);
+			}else {
+				Employee e = (Employee) request.getSession().getAttribute("employee");
+				List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
+				List<EventType> eventTypes = reimbursementDAO.getEventTypes();
+				List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
+				request.setAttribute("employee", e);
+				request.setAttribute("reimbursements", reimbursements);
+				request.setAttribute("eventTypes", eventTypes);
+				request.setAttribute("gradeFormats", gradeFormats);
+				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
+				rd.forward(request, response);
+			}
 		}else {
-			Employee e = (Employee) request.getSession().getAttribute("employee");
-			List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
-			List<EventType> eventTypes = reimbursementDAO.getEventTypes();
-			List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
-			request.setAttribute("employee", e);
-			request.setAttribute("reimbursements", reimbursements);
-			request.setAttribute("eventTypes", eventTypes);
-			request.setAttribute("gradeFormats", gradeFormats);
-			RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
-			rd.forward(request, response);
+			response.sendRedirect("login");
 		}
-		
 		
 
 		
