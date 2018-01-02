@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.revature.beans.Employee;
+import com.revature.beans.EmployeeReimbursement;
 import com.revature.beans.EventType;
 import com.revature.beans.GradeFormat;
 import com.revature.beans.Reimbursement;
@@ -39,14 +40,30 @@ public class Dashboard extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		if(request.getSession().getAttribute("employee") == null) {
-			response.sendRedirect("login");
+		if(request.getParameter("role") != null && request.getParameter("role").equals("employee")) {
+			Employee e = (Employee) request.getSession().getAttribute("employee");
+			List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
+			List<EventType> eventTypes = reimbursementDAO.getEventTypes();
+			List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
+			request.setAttribute("employee", e);
+			request.setAttribute("reimbursements", reimbursements);
+			request.setAttribute("eventTypes", eventTypes);
+			request.setAttribute("gradeFormats", gradeFormats);
+			RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
+			rd.forward(request, response);
+		}else if(request.getParameter("role") != null && request.getParameter("role").equals("supervisor")) {
+			Employee e = (Employee) request.getSession().getAttribute("employee");
+			List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromUnderlings(e.getEmployeeId());
+			request.setAttribute("employee", e);
+			request.setAttribute("employeeReimbursements", employeeReimbursements);
+			RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-supervisor.jsp");
+			rd.forward(request, response);
 		}else {
 			Employee e = (Employee) request.getSession().getAttribute("employee");
 			List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
 			List<EventType> eventTypes = reimbursementDAO.getEventTypes();
 			List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
+			request.setAttribute("employee", e);
 			request.setAttribute("reimbursements", reimbursements);
 			request.setAttribute("eventTypes", eventTypes);
 			request.setAttribute("gradeFormats", gradeFormats);
@@ -54,14 +71,17 @@ public class Dashboard extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
+		
+
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		//doGet(request, response);
+		
 	}
 
 }

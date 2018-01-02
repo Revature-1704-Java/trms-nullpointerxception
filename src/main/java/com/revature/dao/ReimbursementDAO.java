@@ -42,7 +42,6 @@ public class ReimbursementDAO {
 	public int create(Employee em, String description, double cost, String gradeFormat, String eventType, String workJustification, byte[] attachment, byte[] approvalDocument, int timeMissed, java.util.Date startDate, String address, String city, String zip, String country) {
 		
 		String sql = "{call sp_insert_reimbursement (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
-		System.out.println(eventType);
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		CallableStatement cs = null;
 		int reimbursementId = 0;
@@ -60,7 +59,7 @@ public class ReimbursementDAO {
 			cs.setString(6, gradeFormat);
 			cs.setString(7, eventType);
 			cs.setString(8, workJustification);
-			if(attachment.length == 0) {
+			if(attachment == null || attachment.length == 0) {
 				cs.setNull(9, Types.BLOB);
 			}else {
 				Blob bAttachment = conn.createBlob();
@@ -68,7 +67,7 @@ public class ReimbursementDAO {
 				cs.setBlob(9, bAttachment);
 			}
 			
-			if(approvalDocument.length == 0) {
+			if(approvalDocument == null || approvalDocument.length == 0) {
 				cs.setNull(10, Types.BLOB);
 			}else {
 				Blob bApprovalDocument = conn.createBlob();

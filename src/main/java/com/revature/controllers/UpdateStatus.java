@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class FrontController
+ * Servlet implementation class UpdateStatus
  */
-@WebServlet("/")
-public class FrontController extends HttpServlet {
+@WebServlet("/updatestatus")
+public class UpdateStatus extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FrontController() {
+    public UpdateStatus() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,36 +27,15 @@ public class FrontController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String requestUrl = request.getRequestURI().substring(request.getContextPath().length());
-		
-		if(requestUrl.equals("/dashboad")) {
-			if(request.getSession().getAttribute("employee") == null) {
-				response.sendRedirect("login");
-			}else {
-				response.sendRedirect("dashboard");
-			}
-		}else if(requestUrl.equals("/login")) {
-			if(request.getSession().getAttribute("employee") == null) {
-				response.sendRedirect("login");
-			}else {
-				response.sendRedirect("dashboard");
-			}
-		}else if(requestUrl.equals("/")) {
-			if(request.getSession().getAttribute("employee") == null) {
-				response.sendRedirect("login");
-			}else {
-				response.sendRedirect("dashboard");
-			}
-		}
-		
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		//doGet(request, response);
+		
 	}
 
 }

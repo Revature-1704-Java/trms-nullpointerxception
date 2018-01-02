@@ -106,5 +106,46 @@ $(function(){
 		xhr.send(data);
 		
 	});
+	
+//	$('#employeeView').click(function(){
+//		$.ajax({
+//			url: 'dashboard',
+//			method: 'POST',
+//			data: {role: 'employee'},
+//			success: function(){
+//				console.log('Success');
+//			}
+//		});
+//	});
+//	$('#supervisorView').click(function(){
+//		$.ajax({
+//			url: 'dashboard',
+//			method: 'POST',
+//			data: {role: 'supervisor'},
+//			success: function(){
+//				console.log('Success');
+//			}
+//		});
+//	});
+//	$('#departmentHeadView').click(function(){
+//		$.ajax({
+//			url: 'dashboard',
+//			method: 'POST',
+//			data: {role: 'departmentHead'},
+//			success: function(){
+//				console.log('Success');
+//			}
+//		});
+//	});
+//	$('#benefitsCoordinatorView').click(function(){
+//		$.ajax({
+//			url: 'dashboard',
+//			method: 'POST',
+//			data: {role: 'benCo'},
+//			success: function(){
+//				console.log('Success');
+//			}
+//		});
+//	});
 });
 

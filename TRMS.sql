@@ -102,7 +102,7 @@ CREATE TABLE reimbursement (
     CONSTRAINT fk_approvalprocessid FOREIGN KEY (approvalprocessid) REFERENCES approvalprocess(approvalprocessid)
 );
 
-
+CREATE OR REPLACE TYPE rolearray AS VARRAY(4) OF VARCHAR2(50);
 -- Populate Event Type table
 INSERT INTO eventtype VALUES (1, 'University Course', 0.80);
 INSERT INTO eventtype VALUES (2, 'Seminar', 0.60);

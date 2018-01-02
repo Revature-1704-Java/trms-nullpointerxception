@@ -14,7 +14,42 @@
 	<body>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-3">
+					<ul class="list-group">
+					<% Employee employee = (Employee) request.getAttribute("employee"); %>
+					<% if(employee.getRoles().contains("Employee")){ %>
+						<li class="list-group-item">
+							<form action="dashboard" method="GET">
+							  	<input name="role" type="hidden" value="employee">
+							  	<button class="btn btn-primary" type="submit">Employee View</button>
+							 </form>
+						</li>
+					<% } %>
+					<% if(employee.getRoles().contains("Supervisor")){ %>
+					<li class="list-group-item">
+							<form action="dashboard" method="GET">
+					  			<input name="role" type="hidden" value="supervisor">
+					  			<button class="btn btn-primary" type="submit">Supervisor View</button>
+					 		 </form>
+						</li>
+					  
+					<% } %>
+					<% if(employee.getRoles().contains("Department Head")){ %>
+					  <form action="dashboard" method="GET">
+					  	<input name="role" type="hidden" value="departmentHead">
+					  	<button class="btn btn-primary" type="submit">Department Head View</button>
+					  </form>
+					<% } %>
+					<% if(employee.getRoles().contains("Benefits Coordinator")){ %>
+					  <form action="dashboard" method="GET">
+					  	<input name="role" type="hidden" value="benefitsCoordinator">
+					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
+					  </form>
+					<% } %>
+					
+					</ul>
+				</div>
+				<div class="col-sm-9">
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createReimbursement">Submit New Reimbursement Form</button>
 					<div id="accordion" role="tablist" aria-multiselectable="true">
 					<%! List<Reimbursement> reimbursements; %>
