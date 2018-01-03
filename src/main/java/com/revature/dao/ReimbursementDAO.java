@@ -763,6 +763,26 @@ public class ReimbursementDAO {
 					e.printStackTrace();
 				}
 			}
+		}else if(role.equals("employee")) {
+			String sql = "{call sp_cancel_reim (?)}";
+			try (Connection conn = connectionUtil.getConnection()){
+				
+				cs = conn.prepareCall(sql);
+				cs.setInt(1, id);
+				
+				cs.execute();
+				cs.close();
+				
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}

@@ -116,6 +116,19 @@ $(function(){
 			}
 		});
 	});
+	
+	$('#cancelReimbursement').click(function(){
+		console.log('test');
+		$.ajax({
+			url:'updatestatus',
+			method:'POST',
+			data: {reimbursementId: $(this).siblings('input').val(), role: 'employee'},
+			success: function(){
+				location.reload(true);
+			}
+				
+		});
+	});
 
 });
 

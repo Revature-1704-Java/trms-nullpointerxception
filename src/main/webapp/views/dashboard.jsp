@@ -173,10 +173,11 @@
 											<% } %>
 										</div>
 									</div>
-									<% if(reimbursements.get(i).getAdjustedCost() != 0){ %>
+									<% if(reimbursements.get(i).getAdjustedCost() != 0 && !reimbursements.get(i).getStatus().equals("EMPLOYEE CANCELED")){ %>
 									<div class="row">
 										<div class="col-sm-12">
-											<button type="button" class="btn btn-danger">Cancel Reimbursements</div>
+											<input id="cancel-reimbursementId" type="hidden" value="<%= reimbursements.get(i).getReimbursementId() %>" readonly>
+											<button id="cancelReimbursement" type="button" class="btn btn-danger">Cancel Reimbursement</div>
 										</div>
 									</div>
 									<% } %>
