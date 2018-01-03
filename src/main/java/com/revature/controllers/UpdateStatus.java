@@ -42,6 +42,8 @@ public class UpdateStatus extends HttpServlet {
 		reimbursementDAO.updateStatus(Integer.parseInt(request.getParameter("reimbursementId")), ((Employee)request.getSession().getAttribute("employee")).getEmployeeId() ,request.getParameter("approval"), request.getParameter("reason"), request.getParameter("role"));
 		if(request.getParameter("role").equals("supervisor")) {
 			response.sendRedirect("dashboard?view=supervisor");
+		}else if(request.getParameter("role").equals("departmentHead")) {
+			response.sendRedirect("dashboard?view=departmentHead");
 		}
 		
 	}

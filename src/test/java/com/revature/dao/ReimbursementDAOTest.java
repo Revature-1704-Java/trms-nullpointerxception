@@ -107,23 +107,52 @@ public class ReimbursementDAOTest {
 //		assertNull(reimbursementDAO.getById(0));
 //	}
 	
+//	@Test
+//	public void viewUnderlingReimbursement() {
+//		employeeDAO.create("email3@email.com", "password", "Test", "test", null, 1);
+//		Employee e = employeeDAO.getEmployee("email3@email.com", "password");
+//		String[] roles = {"Employee", "Supervisor"};
+//		employeeDAO.setRoles(e, roles);
+//		employeeDAO.create("email4@email.com", "password", "Test", "test", e.getEmployeeId(), 1);
+//		Employee e2 = employeeDAO.getEmployee("email4@email.com", "password");
+//		String[] e2roles = {"Employee"};
+//		employeeDAO.setRoles(e2, e2roles);
+//		reimbursementDAO.create(e2, "Apples", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+//		reimbursementDAO.create(e2, "Banana", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+//		List<EmployeeReimbursement> list = reimbursementDAO.getAllReimbursementsFromUnderlings(e.getEmployeeId());
+//		assertEquals(e2.getEmployeeId(), list.get(0).getEmployee().getEmployeeId());
+//		assertEquals("Apples", list.get(0).getReimbursement().getDescription());
+//		assertEquals(e2.getEmployeeId(), list.get(1).getEmployee().getEmployeeId());
+//		assertEquals("Banana", list.get(1).getReimbursement().getDescription());
+//	}
+	
 	@Test
-	public void viewUnderlingReimbursement() {
-		employeeDAO.create("email3@email.com", "password", "Test", "test", null, 1);
+	public void viewAllFromDepartment() {
+		employeeDAO.create("email@email.com", "password", "Department", "Head", null, 1);
+		Employee head = employeeDAO.getEmployee("email@email.com", "password");
+		String[] roles = {"Employee", "Department Head"};
+		employeeDAO.setRoles(head, roles);
+		employeeDAO.create("email2@email.com", "password", "Super", "Visor", head.getEmployeeId(), 1);
+		Employee supervisor = employeeDAO.getEmployee("email2@email.com", "password");
+		String [] roles1 = {"Employee", "Supervisor"};
+		employeeDAO.setRoles(supervisor, roles1);
+		employeeDAO.create("email3@email.com", "password", "Employee", "1", supervisor.getEmployeeId(), 1);
 		Employee e = employeeDAO.getEmployee("email3@email.com", "password");
-		String[] roles = {"Employee", "Supervisor"};
-		employeeDAO.setRoles(e, roles);
-		employeeDAO.create("email4@email.com", "password", "Test", "test", e.getEmployeeId(), 1);
-		Employee e2 = employeeDAO.getEmployee("email4@email.com", "password");
-		String[] e2roles = {"Employee"};
-		employeeDAO.setRoles(e2, e2roles);
-		reimbursementDAO.create(e2, "Apples", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
-		reimbursementDAO.create(e2, "Banana", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
-		List<EmployeeReimbursement> list = reimbursementDAO.getAllReimbursementsFromUnderlings(e.getEmployeeId());
-		assertEquals(e2.getEmployeeId(), list.get(0).getEmployee().getEmployeeId());
-		assertEquals("Apples", list.get(0).getReimbursement().getDescription());
-		assertEquals(e2.getEmployeeId(), list.get(1).getEmployee().getEmployeeId());
-		assertEquals("Banana", list.get(1).getReimbursement().getDescription());
+		String [] roles2 = {"Employee", "Supervisor"};
+		employeeDAO.setRoles(e, roles2);
+		int i = reimbursementDAO.create(e, "Apples", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+		reimbursementDAO.create(e, "Banana", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+		employeeDAO.create("email4@email.com", "password", "Employee", "2", supervisor.getEmployeeId(), 1);
+		e = employeeDAO.getEmployee("email4@email.com", "password");
+		String [] roles3 = {"Employee", "Supervisor"};
+		employeeDAO.setRoles(e, roles3);
+		reimbursementDAO.create(e, "Red", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+		int j = reimbursementDAO.create(e, "Blue", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+		reimbursementDAO.updateStatus(i, supervisor.getEmployeeId(), "APPROVED", null,"supervisor");
+		reimbursementDAO.updateStatus(j, supervisor.getEmployeeId(), "APPROVED", null,"supervisor");
+		List<EmployeeReimbursement> list = reimbursementDAO.getAllReimbursementsFromDepartment(head.getDepartmentId());
+		assertEquals("Apples",list.get(0).getReimbursement().getDescription());
+		assertEquals("Blue",list.get(1).getReimbursement().getDescription());
 	}
 
 }

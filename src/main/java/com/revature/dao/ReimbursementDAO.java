@@ -468,6 +468,95 @@ public class ReimbursementDAO {
 		
 	}
 	
+	public List<EmployeeReimbursement> getAllReimbursementsFromDepartment(int departmentId) {
+		List<EmployeeReimbursement> list = new ArrayList<EmployeeReimbursement>();
+		String sql = "{call sp_select_all_department (?, ?)}";
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		Employee employee = null;
+		Reimbursement reimbursement = null;
+		EmployeeReimbursement employeeReimbursement = null;
+		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
+		try (Connection conn = connectionUtil.getConnection()){
+			
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, departmentId);
+			cs.registerOutParameter(2, OracleTypes.CURSOR);
+			
+			cs.execute();
+			
+			rs = (ResultSet) cs.getObject(2);
+			while(rs.next()) {
+				employee = new Employee();
+				reimbursement = new Reimbursement();
+				reimbursement.setReimbursementId(rs.getInt("reimbursementid"));
+				reimbursement.setEmployeeId(rs.getInt("employeeid"));
+				reimbursement.setSupervisorId(rs.getInt("supervisorid"));
+				reimbursement.setDepartmentHeadId(rs.getInt("departmentheadid"));
+				reimbursement.setBenCoId(rs.getInt("bencoid"));
+				reimbursement.setApprovalProcessId(rs.getInt("approvalprocessid"));
+				reimbursement.setEmployeeCreationDate(rs.getDate("employeecreationdate"));
+				reimbursement.setEmployeeCreationTime(rs.getTimestamp("employeecreationtime"));
+				reimbursement.setSupervisorApproveDate(rs.getDate("supervisorapprovedate"));
+				reimbursement.setDepartmentHeadApproveDate(rs.getDate("departmentheadapprovedate"));
+				reimbursement.setReimbursementLocationId(rs.getInt("reimbursementlocationid"));
+				reimbursement.setStartDate(rs.getDate("startdate"));
+				reimbursement.setAddress(rs.getString("address"));
+				reimbursement.setCity(rs.getString("city"));
+				reimbursement.setZip(rs.getString("zip"));
+				reimbursement.setCountry(rs.getString("country"));
+				reimbursement.setDescription(rs.getString("description"));
+				reimbursement.setCost(rs.getDouble("cost"));
+				reimbursement.setAdjustedCost(rs.getDouble("adjustedcost"));
+				reimbursement.setGradeFormatId(rs.getInt("gradeformatid"));
+				reimbursement.setFormat(rs.getString("format"));
+				reimbursement.setDefaultPassingGrade(rs.getString("defaultpassinggrade"));
+				reimbursement.setEventTypeId(rs.getInt("eventtypeid"));
+				reimbursement.setEventType(rs.getString("eventtype"));
+				reimbursement.setCoverage(rs.getDouble("coverage"));
+				reimbursement.setWorkJustification(rs.getString("workjustification"));
+				reimbursement.setAttachment(rs.getBlob("attachment"));
+				reimbursement.setApprovalDocument(rs.getBlob("approvaldocument"));
+				reimbursement.setApprovalId(rs.getInt("approvalid"));
+				reimbursement.setStatus(rs.getString("status"));
+				reimbursement.setTimeMissed(rs.getInt("timemissed"));
+				reimbursement.setDenyReason(rs.getString("denyreason"));
+				reimbursement.setInflatedReimbursementReason(rs.getString("inflatedreimbursementreason"));
+				employee.setEmployeeId(rs.getInt("employeeid"));
+				employee.setEmail(rs.getString("email"));
+				employee.setFirstName(rs.getString("firstname"));
+				employee.setLastName(rs.getString("lastname"));
+				employee.setReportsTo(rs.getInt("reportsto"));
+				employee.setDepartmentId(rs.getInt("departmentid"));
+				
+				employeeReimbursement = new EmployeeReimbursement();
+				employeeReimbursement.setReimbursement(reimbursement);
+				employeeReimbursement.setEmployee(employee);
+				list.add(employeeReimbursement);
+				
+			}
+			
+			
+			rs.close();
+			cs.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(list.size() == 0) {
+			return null;
+		}else {
+			return list;
+		}
+	}
+	
 
 	public void updateStatus(int id, int userId , String approval, String reason, String role) {
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
@@ -494,6 +583,47 @@ public class ReimbursementDAO {
 			}else {
 				
 				String sql = "{call sp_update_deny_supervisor_reim (?,?,?,?)}";
+				try (Connection conn = connectionUtil.getConnection()){
+					cs = conn.prepareCall(sql);
+					cs.setInt(1, id);
+					cs.setInt(2, userId);
+					cs.setString(3, approval);
+					cs.setString(4, reason);
+					
+					cs.execute();
+					cs.close();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}else if(role.equals("departmentHead")) {
+			if(approval.equals("APPROVED")) {
+				String sql = "{call sp_update_approve_depart_reim (?,?)}";
+				try(Connection conn = connectionUtil.getConnection()){
+					cs = conn.prepareCall(sql);
+					cs.setInt(1, id);
+					cs.setInt(2, userId);
+					cs.execute();
+					cs.close();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else {
+				String sql = "{call sp_update_deny_department_reim (?,?,?,?)}";
 				try (Connection conn = connectionUtil.getConnection()){
 					cs = conn.prepareCall(sql);
 					cs.setInt(1, id);

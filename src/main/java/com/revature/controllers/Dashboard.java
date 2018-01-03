@@ -59,6 +59,13 @@ public class Dashboard extends HttpServlet {
 				request.setAttribute("employeeReimbursements", employeeReimbursements);
 				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-supervisor.jsp");
 				rd.forward(request, response);
+			}else if(request.getParameter("view") != null && request.getParameter("view").equals("departmentHead")) {
+				Employee e = (Employee) request.getSession().getAttribute("employee");
+				List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromDepartment(e.getDepartmentId());
+				request.setAttribute("employee", e);
+				request.setAttribute("employeeReimbursements", employeeReimbursements);
+				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-departmenthead.jsp");
+				rd.forward(request, response);
 			}else {
 				Employee e = (Employee) request.getSession().getAttribute("employee");
 				List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
