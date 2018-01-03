@@ -44,6 +44,8 @@ public class UpdateStatus extends HttpServlet {
 			response.sendRedirect("dashboard?view=supervisor");
 		}else if(request.getParameter("role").equals("departmentHead")) {
 			response.sendRedirect("dashboard?view=departmentHead");
+		}else if(request.getParameter("role").equals("benefitsCoordinator")) {
+			response.sendRedirect("dashboard?view=benefitsCoordinator");
 		}
 		
 	}

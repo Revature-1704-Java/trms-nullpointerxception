@@ -173,6 +173,13 @@
 											<% } %>
 										</div>
 									</div>
+									<% if(reimbursements.get(i).getAdjustedCost() != 0){ %>
+									<div class="row">
+										<div class="col-sm-12">
+											<button type="button" class="btn btn-danger">Cancel Reimbursements</div>
+										</div>
+									</div>
+									<% } %>
 								</div>
 							</div>
 						</div>

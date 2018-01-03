@@ -180,7 +180,7 @@
 										<div class="col-sm-12">
 											<input type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
 											<form action="updatestatus" method="POST">
-												<input id="reimbursementId" type="hidden" name="reimbursementId" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
+												<input id="reimbursementId" type="hidden" name="approve-reimbursementId" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
 												<input type="hidden" name="role" value="supervisor">
 												<input name="approval" type="hidden" value="APPROVED">
 												<button id="approve" type="submit" class="btn btn-success">Approve</button>

@@ -19,6 +19,7 @@ import com.revature.beans.EventType;
 import com.revature.beans.GradeFormat;
 import com.revature.beans.Reimbursement;
 import com.revature.util.ConnectionUtil;
+import com.revature.util.ConnectionUtilTest;
 
 import oracle.jdbc.OracleTypes;
 
@@ -460,11 +461,9 @@ public class ReimbursementDAO {
 			e.printStackTrace();
 		}
 		
-		if(list.size() == 0) {
-			return null;
-		}else {
-			return list;
-		}
+
+		return list;
+
 		
 	}
 	
@@ -550,11 +549,91 @@ public class ReimbursementDAO {
 			e.printStackTrace();
 		}
 		
-		if(list.size() == 0) {
-			return null;
-		}else {
-			return list;
+		return list;
+	}
+	
+	public List<EmployeeReimbursement> getAllReimbursementsForBenCo() {
+		List<EmployeeReimbursement> list = new ArrayList<EmployeeReimbursement>();
+		String sql = "{call sp_select_all_benco (?)}";
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		Employee employee = null;
+		Reimbursement reimbursement = null;
+		EmployeeReimbursement employeeReimbursement = null;
+		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
+		try (Connection conn = connectionUtil.getConnection()){
+			
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			cs.execute();
+			
+			rs = (ResultSet) cs.getObject(1);
+			while(rs.next()) {
+				employee = new Employee();
+				reimbursement = new Reimbursement();
+				reimbursement.setReimbursementId(rs.getInt("reimbursementid"));
+				reimbursement.setEmployeeId(rs.getInt("employeeid"));
+				reimbursement.setSupervisorId(rs.getInt("supervisorid"));
+				reimbursement.setDepartmentHeadId(rs.getInt("departmentheadid"));
+				reimbursement.setBenCoId(rs.getInt("bencoid"));
+				reimbursement.setApprovalProcessId(rs.getInt("approvalprocessid"));
+				reimbursement.setEmployeeCreationDate(rs.getDate("employeecreationdate"));
+				reimbursement.setEmployeeCreationTime(rs.getTimestamp("employeecreationtime"));
+				reimbursement.setSupervisorApproveDate(rs.getDate("supervisorapprovedate"));
+				reimbursement.setDepartmentHeadApproveDate(rs.getDate("departmentheadapprovedate"));
+				reimbursement.setReimbursementLocationId(rs.getInt("reimbursementlocationid"));
+				reimbursement.setStartDate(rs.getDate("startdate"));
+				reimbursement.setAddress(rs.getString("address"));
+				reimbursement.setCity(rs.getString("city"));
+				reimbursement.setZip(rs.getString("zip"));
+				reimbursement.setCountry(rs.getString("country"));
+				reimbursement.setDescription(rs.getString("description"));
+				reimbursement.setCost(rs.getDouble("cost"));
+				reimbursement.setAdjustedCost(rs.getDouble("adjustedcost"));
+				reimbursement.setGradeFormatId(rs.getInt("gradeformatid"));
+				reimbursement.setFormat(rs.getString("format"));
+				reimbursement.setDefaultPassingGrade(rs.getString("defaultpassinggrade"));
+				reimbursement.setEventTypeId(rs.getInt("eventtypeid"));
+				reimbursement.setEventType(rs.getString("eventtype"));
+				reimbursement.setCoverage(rs.getDouble("coverage"));
+				reimbursement.setWorkJustification(rs.getString("workjustification"));
+				reimbursement.setAttachment(rs.getBlob("attachment"));
+				reimbursement.setApprovalDocument(rs.getBlob("approvaldocument"));
+				reimbursement.setApprovalId(rs.getInt("approvalid"));
+				reimbursement.setStatus(rs.getString("status"));
+				reimbursement.setTimeMissed(rs.getInt("timemissed"));
+				reimbursement.setDenyReason(rs.getString("denyreason"));
+				reimbursement.setInflatedReimbursementReason(rs.getString("inflatedreimbursementreason"));
+				employee.setEmployeeId(rs.getInt("employeeid"));
+				employee.setEmail(rs.getString("email"));
+				employee.setFirstName(rs.getString("firstname"));
+				employee.setLastName(rs.getString("lastname"));
+				employee.setReportsTo(rs.getInt("reportsto"));
+				employee.setDepartmentId(rs.getInt("departmentid"));
+				
+				employeeReimbursement = new EmployeeReimbursement();
+				employeeReimbursement.setReimbursement(reimbursement);
+				employeeReimbursement.setEmployee(employee);
+				list.add(employeeReimbursement);
+				
+			}
+			
+			
+			rs.close();
+			cs.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		return list;
 	}
 	
 
@@ -644,6 +723,73 @@ public class ReimbursementDAO {
 					e.printStackTrace();
 				}
 			}
+		}else if(role.equals("benefitsCoordinator")) {
+			if(approval.equals("APPROVED")) {
+				String sql = "{call sp_update_approve_benco_reim (?)}";
+				try(Connection conn = connectionUtil.getConnection()){
+					cs = conn.prepareCall(sql);
+					cs.setInt(1, id);
+					cs.execute();
+					cs.close();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else {
+				String sql = "{call sp_update_deny_benco_reim (?,?,?,?)}";
+				try (Connection conn = connectionUtil.getConnection()){
+					cs = conn.prepareCall(sql);
+					cs.setInt(1, id);
+					cs.setInt(2, userId);
+					cs.setString(3, approval);
+					cs.setString(4, reason);
+					
+					cs.execute();
+					cs.close();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+
+	public void alterReimbursementAmount(int id, double alterAmount, String reason) {
+		String sql = "{call sp_update_alter_reim (?,?,?)}";
+		CallableStatement cs = null;
+		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
+		try (Connection conn = connectionUtil.getConnection()){
+			
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, id);
+			cs.setDouble(2, alterAmount);
+			cs.setString(3, reason);
+			cs.execute();
+			cs.close();
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}

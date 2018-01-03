@@ -41,37 +41,44 @@ public class Dashboard extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getSession().getAttribute("employee") != null) {
-			if(request.getParameter("view") != null && request.getParameter("view").equals("employee")) {
-				Employee e = (Employee) request.getSession().getAttribute("employee");
-				List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
+			Employee employee = (Employee) request.getSession().getAttribute("employee");
+			if(request.getParameter("view") != null && request.getParameter("view").equals("employee") && employee.getRoles().contains("Employee")) {
+				
+				List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(employee);
 				List<EventType> eventTypes = reimbursementDAO.getEventTypes();
 				List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
-				request.setAttribute("employee", e);
+				request.setAttribute("employee", employee);
 				request.setAttribute("reimbursements", reimbursements);
 				request.setAttribute("eventTypes", eventTypes);
 				request.setAttribute("gradeFormats", gradeFormats);
 				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard.jsp");
 				rd.forward(request, response);
-			}else if(request.getParameter("view") != null && request.getParameter("view").equals("supervisor")) {
-				Employee e = (Employee) request.getSession().getAttribute("employee");
-				List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromUnderlings(e.getEmployeeId());
-				request.setAttribute("employee", e);
+			}else if(request.getParameter("view") != null && request.getParameter("view").equals("supervisor") && employee.getRoles().contains("Supervisor")) {
+				
+				List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromUnderlings(employee.getEmployeeId());
+				request.setAttribute("employee", employee);
 				request.setAttribute("employeeReimbursements", employeeReimbursements);
 				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-supervisor.jsp");
 				rd.forward(request, response);
-			}else if(request.getParameter("view") != null && request.getParameter("view").equals("departmentHead")) {
-				Employee e = (Employee) request.getSession().getAttribute("employee");
-				List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromDepartment(e.getDepartmentId());
-				request.setAttribute("employee", e);
+			}else if(request.getParameter("view") != null && request.getParameter("view").equals("departmentHead") && employee.getRoles().contains("Department Head")) {
+				
+				List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsFromDepartment(employee.getDepartmentId());
+				request.setAttribute("employee", employee);
 				request.setAttribute("employeeReimbursements", employeeReimbursements);
 				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-departmenthead.jsp");
 				rd.forward(request, response);
-			}else {
-				Employee e = (Employee) request.getSession().getAttribute("employee");
-				List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(e);
+			}else if(request.getParameter("view") != null && request.getParameter("view").equals("benefitsCoordinator") && employee.getRoles().contains("Benefits Coordinator")) {
+				List<EmployeeReimbursement> employeeReimbursements = reimbursementDAO.getAllReimbursementsForBenCo();
+				request.setAttribute("employee", employee);
+				request.setAttribute("employeeReimbursements", employeeReimbursements);
+				RequestDispatcher rd = request.getRequestDispatcher("views/dashboard-benco.jsp");
+				rd.forward(request, response);
+			}else{
+				
+				List<Reimbursement> reimbursements = reimbursementDAO.getAllByEmployee(employee);
 				List<EventType> eventTypes = reimbursementDAO.getEventTypes();
 				List<GradeFormat> gradeFormats = reimbursementDAO.getGradeFormats();
-				request.setAttribute("employee", e);
+				request.setAttribute("employee", employee);
 				request.setAttribute("reimbursements", reimbursements);
 				request.setAttribute("eventTypes", eventTypes);
 				request.setAttribute("gradeFormats", gradeFormats);

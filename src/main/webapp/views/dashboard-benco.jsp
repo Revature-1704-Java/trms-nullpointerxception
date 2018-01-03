@@ -63,9 +63,26 @@
 					<% for(int i = 0; i < reimbursements.size(); i++){ %>
 						<div class="card">
 							<div class="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" aria-expanded="false" aria-controls='collapse<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>' role="tab" id="heading<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
-								<h5 class="mb-0">
-									ID: <%= reimbursements.get(i).getReimbursement().getReimbursementId() %> Employee Name: <%= reimbursements.get(i).getEmployee().getFirstName() %> <%= reimbursements.get(i).getEmployee().getLastName() %> Projected Reimbursement: <%= currencyFormat.format(reimbursements.get(i).getReimbursement().getCost() * reimbursements.get(i).getReimbursement().getCoverage()) %> Status: <%= reimbursements.get(i).getReimbursement().getStatus() %>
-								</h5>
+								<div class="row">
+									<div class="col-sm-6">
+										<h5>ID: <%= reimbursements.get(i).getReimbursement().getReimbursementId() %></h5>
+									</div>
+									<div class="col-sm-6">
+										<h5>Employee Name: <%= reimbursements.get(i).getEmployee().getFirstName() %> <%= reimbursements.get(i).getEmployee().getLastName() %></h5>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<% if(reimbursements.get(i).getReimbursement().getAdjustedCost() == 0){ %>
+										<h5>Projected Reimbursement: <span id="projectedReimbursement"><%= currencyFormat.format(reimbursements.get(i).getReimbursement().getCost() * reimbursements.get(i).getReimbursement().getCoverage()) %></span></h5>
+										<% }else{ %>
+										<h5>Adjusted Reimbursement: <span id="projectedReimbursement"><%= currencyFormat.format(reimbursements.get(i).getReimbursement().getAdjustedCost()) %></span></h5>
+										<% } %>
+									</div>
+									<div class="col-sm-6">
+										<h5>Status: <%= reimbursements.get(i).getReimbursement().getStatus() %></h5>
+									</div>
+								</div>
 							</div>
 							<div id="collapse<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
 								<div class="card-body">
@@ -178,18 +195,20 @@
 											<% } %>
 										</div>
 									</div>
-									<% if(reimbursements.get(i).getReimbursement().getStatus().equals("PENDING APPROVAL FROM DEPARTMENT HEAD")){ %>
+									<% if(reimbursements.get(i).getReimbursement().getStatus().equals("PENDING APPROVAL FROM BENEFITS COORDINATOR")){ %>
 									<br>
 									<div class="row">
 										<div class="col-sm-12">
-											<input type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
-											<form action="updatestatus" method="POST">
-												<input type="hidden" name="approve-reimbursementId" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
-												<input type="hidden" name="role" value="departmentHead">
-												<input name="approval" type="hidden" value="APPROVED">
-												<button id="approve" type="submit" class="btn btn-success">Approve</button>
-											</form>
+											<input id="approve-reimbursementId" type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
+											<input id="approve-role" name="role" type="hidden" value="benefitsCoordinator" readonly>
+											<input id="approve-approval" name="approval" type="hidden" value="APPROVED" readyonly>
+											<button id="approve" type="submit" class="btn btn-success">Approve</button>
+											
+											<button id="change" type="button" class="btn btn-info" data-toggle="modal" data-target="#changeReimbursement">Alter</button>
+											
+											
 											<button id="deny" type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
+										
 										</div>
 									</div>
 									<% } %>
@@ -200,6 +219,40 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		
+		<div id="changeReimbursement" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		      			<h4 class="modal-title">Alter Reimbursement</h4>
+		        		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		      		</div>
+		      		<div class="modal-body">
+		        		<form action="alterreimbursement" method="POST" id="alterForm">
+		        			
+		        			<div class="form-group">
+		        				<input id="alterReimbursementId" name="alterReimbursementId" type="hidden">
+		        				<label for="projectedReimbursementAlter">Projected Reimbursement</label>
+		        				<input class="form-control" id="projectedReimbursementAlter" readonly>
+		        			</div>
+		        			<div class="form-group">
+		        				<label for="adjustedReimbursementAlter">New Amount</label>
+		        				<input name="alterAmount" class="form-control" id="adjustedReimbursementAlter" type="number">
+		        			</div>
+		        			<div class="form-group">
+		        				<textarea class="form-control" name="reason" id="reasonToAlter" max=500></textarea>
+		        				<small for="reasonToAlter">Required. Max 500 characters.</small>
+		        			</div>
+		        			
+		        			<button type="submit" class="btn btn-danger">Submit</button>
+		        		</form>
+		      		</div>
+		      		<div class="modal-footer">
+		        		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		      		</div>
+		    	</div>
+		  	</div>
 		</div>
 		
 		<div id="denyReimbursement" class="modal fade" role="dialog">
@@ -213,7 +266,7 @@
 		        		<form action="updatestatus" method="POST" id="denyForm">
 		        			<div class="form-group">
 		        				<input id="reimbursementId" type="hidden" name="reimbursementId" value="">
-		        				<input type="hidden" name="role" value="departmentHead">
+		        				<input type="hidden" name="role" value="benefitsCoordinator">
 		        				<input type="hidden" name="approval" value="DENIED">
 		        				<textarea class="form-control" name="reason" id="reasonToDeny" max=500></textarea>
 		        				<small for="reasonToDeny">Required. Max 500 characters.</small>
@@ -231,6 +284,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-		<script src="static/js/dashboard-departmenthead.js"></script>
+		<script src="static/js/dashboard-benco.js"></script>
 	</body>
 </html>
