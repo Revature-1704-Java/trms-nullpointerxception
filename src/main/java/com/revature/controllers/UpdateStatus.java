@@ -39,7 +39,7 @@ public class UpdateStatus extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//doGet(request, response);
 		ReimbursementDAO reimbursementDAO = ReimbursementDAO.getInstance();
-		reimbursementDAO.updateStatus(Integer.parseInt(request.getParameter("reimbursementId")), ((Employee)request.getSession().getAttribute("employee")).getEmployeeId() ,request.getParameter("approval"), request.getParameter("reason"), request.getParameter("role"));
+		reimbursementDAO.updateStatus(Integer.parseInt(request.getParameter("reimbursementId")), ((Employee)request.getSession().getAttribute("employee")) ,request.getParameter("approval"), request.getParameter("reason"), request.getParameter("role"));
 		if(request.getParameter("role").equals("supervisor")) {
 			response.sendRedirect("dashboard?view=supervisor");
 		}else if(request.getParameter("role").equals("departmentHead")) {

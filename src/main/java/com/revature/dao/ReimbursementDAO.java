@@ -691,7 +691,7 @@ public class ReimbursementDAO {
 	}
 	
 
-	public void updateStatus(int id, int userId , String approval, String reason, String role) {
+	public void updateStatus(int id, Employee user , String approval, String reason, String role) {
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		CallableStatement cs = null;
 		if(role.equals("supervisor")) {
@@ -700,7 +700,7 @@ public class ReimbursementDAO {
 				try(Connection conn = connectionUtil.getConnection()){
 					cs = conn.prepareCall(sql);
 					cs.setInt(1, id);
-					cs.setInt(2, userId);
+					cs.setInt(2, user.getEmployeeId());
 					cs.execute();
 					cs.close();
 				} catch (ClassNotFoundException e) {
@@ -713,13 +713,18 @@ public class ReimbursementDAO {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				if(user.getRoles().contains("Department Head")) {
+					updateStatus(id, user, approval, reason, "departmentHead");
+					return;
+				}
 			}else {
 				
 				String sql = "{call sp_update_deny_supervisor_reim (?,?,?,?)}";
 				try (Connection conn = connectionUtil.getConnection()){
 					cs = conn.prepareCall(sql);
 					cs.setInt(1, id);
-					cs.setInt(2, userId);
+					cs.setInt(2, user.getEmployeeId());
 					cs.setString(3, approval);
 					cs.setString(4, reason);
 					
@@ -742,7 +747,7 @@ public class ReimbursementDAO {
 				try(Connection conn = connectionUtil.getConnection()){
 					cs = conn.prepareCall(sql);
 					cs.setInt(1, id);
-					cs.setInt(2, userId);
+					cs.setInt(2, user.getEmployeeId());
 					cs.execute();
 					cs.close();
 				} catch (ClassNotFoundException e) {
@@ -760,7 +765,7 @@ public class ReimbursementDAO {
 				try (Connection conn = connectionUtil.getConnection()){
 					cs = conn.prepareCall(sql);
 					cs.setInt(1, id);
-					cs.setInt(2, userId);
+					cs.setInt(2, user.getEmployeeId());
 					cs.setString(3, approval);
 					cs.setString(4, reason);
 					
@@ -800,7 +805,7 @@ public class ReimbursementDAO {
 				try (Connection conn = connectionUtil.getConnection()){
 					cs = conn.prepareCall(sql);
 					cs.setInt(1, id);
-					cs.setInt(2, userId);
+					cs.setInt(2, user.getEmployeeId());
 					cs.setString(3, approval);
 					cs.setString(4, reason);
 					
