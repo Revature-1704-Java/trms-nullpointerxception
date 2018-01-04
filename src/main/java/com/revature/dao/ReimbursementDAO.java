@@ -40,9 +40,9 @@ public class ReimbursementDAO {
 		}
 	}
 	
-	public int create(Employee em, String description, double cost, String gradeFormat, String eventType, String workJustification, byte[] attachment, byte[] approvalDocument, int timeMissed, java.util.Date startDate, String address, String city, String zip, String country) {
+	public int create(Employee em, String description, double cost, String gradeFormat, String eventType, String workJustification, byte[] attachment, byte[] approvalDocument, int timeMissed, java.util.Date startDate, String address, String city, String zip, String country, String passingGrade) {
 		
-		String sql = "{call sp_insert_reimbursement (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+		String sql = "{call sp_insert_reimbursement (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		CallableStatement cs = null;
 		int reimbursementId = 0;
@@ -78,11 +78,13 @@ public class ReimbursementDAO {
 			
 			cs.setInt(11, timeMissed);
 			
-			cs.registerOutParameter(12, Types.INTEGER);
+			cs.setString(12, passingGrade);
+			
+			cs.registerOutParameter(13, Types.INTEGER);
 			
 			cs.execute();
 			
-			reimbursementId = cs.getInt(12);
+			reimbursementId = cs.getInt(13);
 			
 			
 		} catch (SQLException e) {
@@ -211,6 +213,7 @@ public class ReimbursementDAO {
 				reimbursement.setAdjustedCost(rs.getDouble("adjustedcost"));
 				reimbursement.setGradeFormatId(rs.getInt("gradeformatid"));
 				reimbursement.setFormat(rs.getString("format"));
+				reimbursement.setCustomPassingGrade(rs.getString("custompassinggrade"));
 				reimbursement.setDefaultPassingGrade(rs.getString("defaultpassinggrade"));
 				reimbursement.setEventTypeId(rs.getInt("eventtypeid"));
 				reimbursement.setEventType(rs.getString("eventtype"));
@@ -344,6 +347,7 @@ public class ReimbursementDAO {
 				reimbursement.setAdjustedCost(rs.getDouble("adjustedcost"));
 				reimbursement.setGradeFormatId(rs.getInt("gradeformatid"));
 				reimbursement.setFormat(rs.getString("format"));
+				reimbursement.setCustomPassingGrade(rs.getString("custompassinggrade"));
 				reimbursement.setDefaultPassingGrade(rs.getString("defaultpassinggrade"));
 				reimbursement.setEventTypeId(rs.getInt("eventtypeid"));
 				reimbursement.setEventType(rs.getString("eventtype"));
@@ -421,6 +425,7 @@ public class ReimbursementDAO {
 				reimbursement.setAdjustedCost(rs.getDouble("adjustedcost"));
 				reimbursement.setGradeFormatId(rs.getInt("gradeformatid"));
 				reimbursement.setFormat(rs.getString("format"));
+				reimbursement.setCustomPassingGrade(rs.getString("custompassinggrade"));
 				reimbursement.setDefaultPassingGrade(rs.getString("defaultpassinggrade"));
 				reimbursement.setEventTypeId(rs.getInt("eventtypeid"));
 				reimbursement.setEventType(rs.getString("eventtype"));
@@ -509,6 +514,7 @@ public class ReimbursementDAO {
 				reimbursement.setAdjustedCost(rs.getDouble("adjustedcost"));
 				reimbursement.setGradeFormatId(rs.getInt("gradeformatid"));
 				reimbursement.setFormat(rs.getString("format"));
+				reimbursement.setCustomPassingGrade(rs.getString("custompassinggrade"));
 				reimbursement.setDefaultPassingGrade(rs.getString("defaultpassinggrade"));
 				reimbursement.setEventTypeId(rs.getInt("eventtypeid"));
 				reimbursement.setEventType(rs.getString("eventtype"));
@@ -593,6 +599,7 @@ public class ReimbursementDAO {
 				reimbursement.setAdjustedCost(rs.getDouble("adjustedcost"));
 				reimbursement.setGradeFormatId(rs.getInt("gradeformatid"));
 				reimbursement.setFormat(rs.getString("format"));
+				reimbursement.setCustomPassingGrade(rs.getString("custompassinggrade"));
 				reimbursement.setDefaultPassingGrade(rs.getString("defaultpassinggrade"));
 				reimbursement.setEventTypeId(rs.getInt("eventtypeid"));
 				reimbursement.setEventType(rs.getString("eventtype"));

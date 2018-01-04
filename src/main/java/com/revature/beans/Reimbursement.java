@@ -28,6 +28,7 @@ public class Reimbursement implements Serializable {
 	private double adjustedCost;
 	private int gradeFormatId;
 	private String format;
+	private String customPassingGrade;
 	private String defaultPassingGrade;
 	private int eventTypeId;
 	private String eventType;
@@ -307,6 +308,14 @@ public class Reimbursement implements Serializable {
 
 	public void setInflatedReimbursementReason(String inflatedReimbursementReason) {
 		this.inflatedReimbursementReason = inflatedReimbursementReason;
+	}
+	
+	public String getCustomPassingGrade() {
+		return customPassingGrade;
+	}
+
+	public void setCustomPassingGrade(String customPassingGrade) {
+		this.customPassingGrade = customPassingGrade;
 	}
 
 }

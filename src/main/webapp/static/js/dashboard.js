@@ -1,4 +1,7 @@
 $(function(){
+	
+	$('#formPassingGrade').hide();
+	
 	document.getElementById('newReimbursement').addEventListener('submit', function(e){
 		e.preventDefault();
 		var data = new FormData(this);
@@ -14,6 +17,12 @@ $(function(){
 				$('#createReimbursement').modal('hide');
 				
 			}else{
+				let passingGrade;
+				if(json.passingGrade == 'DEFAULT'){
+					passingGrade = json.defaultPassingGrade;
+				}else{
+					passingGrade = json.customPassingGrade;
+				}
 				$('#createReimbursement').modal('hide');
 				$('#errCreate').hide();
 				$('#accordion').prepend(`
@@ -42,17 +51,23 @@ $(function(){
 									</div>
 									<br>
 									<div class="row">
-										<div class="col-sm-3">
+										<div class="col-sm-4">
 											Cost: ${json.cost}
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-4">
 											Event Type: ${json.eventType}
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-4">
+											Start Date: ${json.startDate}
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-6">
 											Grade Format: ${json.gradeFormat}
 										</div>
-										<div class="col-sm-3">
-											Default Passing Grade: ${json.defaultPassingGrade}
+										<div class="col-sm-6">
+											 Passing Grade: ${passingGrade}
 										</div>
 									</div>
 									<br>
@@ -90,7 +105,7 @@ $(function(){
 									<br>
 									<div class="row">
 										<div class="col-sm-12">
-											Time Missed: ${parseInt(json.timeMissed) / 24}d		${parseInt(json.timeMissed) % 24}h
+											Time Missed: ${Math.floor(parseInt(json.timeMissed) / 24)}d		${parseInt(json.timeMissed) % 24}h
 										</div>
 									</div>
 									<br>
@@ -150,6 +165,17 @@ $(function(){
 				
 		});
 	});
+	
+	$('#formPassingGradeSelection').change(function(){
+		
+		if($(this).val() == 'CUSTOM'){
+			$('#formPassingGrade').show();
+		}else{
+			$('#formPassingGrade').hide();
+		}
+		
+	});
+	
 
 });
 

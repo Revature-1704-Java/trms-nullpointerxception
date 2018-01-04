@@ -169,8 +169,8 @@ public class ReimbursementDAOTest {
 		Employee e = employeeDAO.getEmployee("email3@email.com", "password");
 		String [] roles2 = {"Employee", "Supervisor"};
 		employeeDAO.setRoles(e, roles2);
-		int i = reimbursementDAO.create(e, "Apples", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
-		reimbursementDAO.create(e, "Banana", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+		int i = reimbursementDAO.create(e, "Apples", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa", "50");
+		reimbursementDAO.create(e, "Banana", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa", "DEFAULT");
 		employeeDAO.create("email4@email.com", "password", "Employee", "2", supervisor.getEmployeeId(), 1);
 		e = employeeDAO.getEmployee("email4@email.com", "password");
 		String [] roles3 = {"Employee", "Supervisor"};
@@ -179,8 +179,8 @@ public class ReimbursementDAOTest {
 		Employee benCo = employeeDAO.getEmployee("email5@email.com", "password");
 		String [] roles4 = {"Employee", "Benefits Coordinator"};
 		employeeDAO.setRoles(benCo, roles4);
-		reimbursementDAO.create(e, "Red", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
-		int j = reimbursementDAO.create(e, "Blue", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa");
+		reimbursementDAO.create(e, "Red", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa", "90");
+		int j = reimbursementDAO.create(e, "Blue", 15, "PASS/FAIL", "Seminar", "For work", null, null, 24, new Date(new java.util.Date().getTime()), "address", "city", "23", "usa", "DEFAULT");
 		reimbursementDAO.updateStatus(j, supervisor.getEmployeeId(), "APPROVED", null,"supervisor");
 		reimbursementDAO.updateStatus(j, head.getEmployeeId(), "APPROVED", null,"departmentHead");
 		List<EmployeeReimbursement> list = reimbursementDAO.getAllReimbursementsForBenCo();

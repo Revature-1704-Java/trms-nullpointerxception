@@ -89,8 +89,15 @@ public class NewReimbursement extends HttpServlet {
 		}
 		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 		
+		String passingGradeSelection = request.getParameter("passingGradeSelection");
+		String passingGrade;
+		if(passingGradeSelection.equals("CUSTOM")) {
+			passingGrade = request.getParameter("passingGrade");
+		}else {
+			passingGrade = "DEFAULT";
+		}
 		
-		int pk = reimbursementDAO.create(employee, request.getParameter("description"), cost, request.getParameter("gradeFormat"), request.getParameter("eventType"), request.getParameter("workJustification"), attachment, approvalDocument, timeMissed, startDate, request.getParameter("address"), request.getParameter("city"), request.getParameter("zip"), request.getParameter("country"));
+		int pk = reimbursementDAO.create(employee, request.getParameter("description"), cost, request.getParameter("gradeFormat"), request.getParameter("eventType"), request.getParameter("workJustification"), attachment, approvalDocument, timeMissed, startDate, request.getParameter("address"), request.getParameter("city"), request.getParameter("zip"), request.getParameter("country"), passingGrade);
 		Reimbursement reimbursement = reimbursementDAO.getById(pk);
 		json.put("reimbursementId", reimbursement.getReimbursementId());
 		json.put("status", reimbursement.getStatus());
@@ -99,7 +106,9 @@ public class NewReimbursement extends HttpServlet {
 		json.put("projectedCost", currencyFormat.format(reimbursement.getCost() * reimbursement.getCoverage()));
 		json.put("employeeCreationTime", reimbursement.getEmployeeCreationTime().toLocaleString());
 		json.put("eventType", reimbursement.getEventType());
-		json.put("gradeFormat", reimbursement.getDefaultPassingGrade());
+		json.put("gradeFormat", reimbursement.getFormat());
+		json.put("customPassingGrade", reimbursement.getCustomPassingGrade());
+		json.put("defaultPassingGrade", reimbursement.getDefaultPassingGrade());
 		json.put("startDate", startDate.toLocalDate().toString());
 		if(reimbursement.getSupervisorApproveDate() == null) {
 			json.put("supervisorApprovalDate", "--");
@@ -111,10 +120,15 @@ public class NewReimbursement extends HttpServlet {
 		}else {
 			json.put("departmentHeadApprovalDate", reimbursement.getDepartmentHeadApproveDate().toLocaleString());
 		}
-		json.put("adjustedReimbursement", reimbursement.getAdjustedCost());
+		if(reimbursement.getAdjustedCost() == 0) {
+			json.put("adjustedReimbursement", "--");
+		}else {
+			json.put("adjustedReimbursement", reimbursement.getAdjustedCost());
+		}
+		
 		json.put("description", reimbursement.getDescription());
 		json.put("workJustification", reimbursement.getWorkJustification());
-		json.put("workMissed", reimbursement.getTimeMissed());
+		json.put("timeMissed", reimbursement.getTimeMissed());
 		json.put("address", reimbursement.getAddress());
 		json.put("city", reimbursement.getCity());
 		json.put("zip", reimbursement.getZip());

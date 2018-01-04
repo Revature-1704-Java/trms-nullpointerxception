@@ -97,12 +97,18 @@
 									</div>
 									<br>
 									<div class="row">
-										<div class="col-sm-4">
+										<div class="col-sm-6">
 											Grade Format: <%= reimbursements.get(i).getFormat() %>
 										</div>
-										<div class="col-sm-4">
-											Default Passing Grade: <%= reimbursements.get(i).getDefaultPassingGrade() %>
+										<% if(reimbursements.get(i).getCustomPassingGrade().equals("DEFAULT")){ %>
+										<div class="col-sm-6">
+											 Passing Grade: <%= reimbursements.get(i).getDefaultPassingGrade() %>
 										</div>
+										<% }else{ %>
+										<div class="col-sm-6">
+											 Passing Grade: <%= reimbursements.get(i).getCustomPassingGrade() %>
+										</div>
+										<% } %>
 									</div>
 									<br>
 									<div class="row">
@@ -258,6 +264,20 @@
 											</select>
 											<small for="formGradeFormats">Required</small>
 										</div>
+										<div class="form-row">
+											<div class="col">
+												<label for="formPassingGradeSelection">Passing Grade</label>
+												<select name="passingGradeSelection" class="form-control" id="formPassingGradeSelection" required>
+													<option value="DEFAULT">Default</option>
+													<option value="CUSTOM">Custom</option>
+												</select>
+											</div>
+											<div class="col">
+												<label for="formPassingGradeSelection">Grade</label>
+												<input id="formPassingGrade" class="form-control" name="passingGrade" type="text">
+											</div>
+										</div>
+										<br>
 										<h6 id="eventLocation">Event Location</h6>
 										<small for="eventLocation">required</small>
 										<div class="form-group">
