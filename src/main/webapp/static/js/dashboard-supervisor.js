@@ -1,6 +1,6 @@
 $(function(){
-	$('#deny').click(function(){
-		let id = $(this).siblings('input').val();
+	$('.deny').click(function(){
+		let id = $(this).siblings('#approve-reimbursementId').val();
 		$('#reimbursementId').val(id);
 	});
 	
@@ -11,6 +11,23 @@ $(function(){
 			success: function(){
 				location.reload(true);
 			}
+		});
+	});
+	
+	$('.approve').click(function(){
+		console.log('test');
+		let i_id = $(this).siblings('#approve-reimbursementId').val();
+		let i_role = $('#approve-role').val();
+		let i_approval = $('#approve-approval').val();
+		let i_data = {reimbursementId : i_id, role: i_role, approval: i_approval};
+		$.ajax({
+			url:'updatestatus',
+			method:'POST',
+			data: i_data,
+			success:function(){
+				location.reload(true);
+			}
+		
 		});
 	});
 });

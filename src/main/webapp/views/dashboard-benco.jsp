@@ -18,41 +18,28 @@
 					<ul class="list-group">
 					<% Employee employee = (Employee) request.getAttribute("employee"); %>
 					<% if(employee.getRoles().contains("Employee")){ %>
-						<li class="list-group-item">
-							<form action="dashboard" method="GET">
-							  	<input name="view" type="hidden" value="employee">
-							  	<button class="btn btn-primary" type="submit">Employee View</button>
-							 </form>
-						</li>
+						
+							<a href="dashboard?view=employee" class="btn btn-info" role="button">Employee View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Supervisor")){ %>
-					<li class="list-group-item">
-							<form action="dashboard" method="GET">
-					  			<input name="view" type="hidden" value="supervisor">
-					  			<button class="btn btn-primary" type="submit">Supervisor View</button>
-					 		 </form>
-						</li>
-					  
+					
+							<a href="dashboard?view=supervisor" class="btn btn-info" role="button">Supervisor View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Department Head")){ %>
-					<li class="list-group-item">
-					  <form action="dashboard" method="GET">
-					  	<input name="view" type="hidden" value="departmentHead">
-					  	<button class="btn btn-primary" type="submit">Department Head View</button>
-					  </form>
-					 </li>
+						
+							<a href="dashboard?view=departmentHead" class="btn btn-info" role="button">Department Head View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Benefits Coordinator")){ %>
-					<li class="list-group-item">
-					  <form action="dashboard" method="GET">
-					  	<input name="view" type="hidden" value="benefitsCoordinator">
-					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
-					  </form>
-					 </li>
+						
+							<a href="dashboard?view=benefitsCoordinator" class="btn btn-info" role="button">Benefits Coordinator</a>
+						
 					<% } %>
-						<li class="list-group-item">
+						
 							<button id="logout" type="button" class="btn btn-primary">Logout</button>
-						</li>
+						
 					</ul>
 				</div>
 				<div class="col-sm-9">
@@ -202,12 +189,12 @@
 											<input id="approve-reimbursementId" type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
 											<input id="approve-role" name="role" type="hidden" value="benefitsCoordinator" readonly>
 											<input id="approve-approval" name="approval" type="hidden" value="APPROVED" readyonly>
-											<button id="approve" type="submit" class="btn btn-success">Approve</button>
+											<button type="submit" class="btn btn-success approve">Approve</button>
 											
-											<button id="change" type="button" class="btn btn-info" data-toggle="modal" data-target="#changeReimbursement">Alter</button>
+											<button type="button" class="btn btn-info change" data-toggle="modal" data-target="#changeReimbursement">Alter</button>
 											
 											
-											<button id="deny" type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
+											<button type="button" class="btn btn-danger deny" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
 										
 										</div>
 									</div>

@@ -1,6 +1,6 @@
 $(function(){
-	$('#approve').click(function(){
-		let i_id = $('#approve-reimbursementId').val();
+	$('.approve').click(function(){
+		let i_id = $(this).siblings('#approve-reimbursementId').val();
 		let i_role = $('#approve-role').val();
 		let i_approval = $('#approve-approval').val();
 		let i_data = {reimbursementId : i_id, role: i_role, approval: i_approval};
@@ -16,12 +16,12 @@ $(function(){
 		});
 	});
 	
-	$('#change').click(function(){
+	$('.change').click(function(){
 		$('#projectedReimbursementAlter').val($('#projectedReimbursement').text().substring(1));
 		$('#alterReimbursementId').val($(this).siblings('#approve-reimbursementId').val());
 	});
 	
-	$('#deny').click(function(){
+	$('.deny').click(function(){
 		let id = $(this).siblings('input').val();
 		$('#approve-reimbursementId').val(id);
 		

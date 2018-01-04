@@ -18,41 +18,28 @@
 					<ul class="list-group">
 					<% Employee employee = (Employee) request.getAttribute("employee"); %>
 					<% if(employee.getRoles().contains("Employee")){ %>
-						<li class="list-group-item">
-							<form action="dashboard" method="GET">
-							  	<input name="view" type="hidden" value="employee">
-							  	<button class="btn btn-primary" type="submit">Employee View</button>
-							 </form>
-						</li>
+						
+							<a href="dashboard?view=employee" class="btn btn-info" role="button">Employee View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Supervisor")){ %>
-					<li class="list-group-item">
-							<form action="dashboard" method="GET">
-					  			<input name="view" type="hidden" value="supervisor">
-					  			<button class="btn btn-primary" type="submit">Supervisor View</button>
-					 		 </form>
-						</li>
-					  
+					
+							<a href="dashboard?view=supervisor" class="btn btn-info" role="button">Supervisor View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Department Head")){ %>
-					<li class="list-group-item">
-					  <form action="dashboard" method="GET">
-					  	<input name="view" type="hidden" value="departmentHead">
-					  	<button class="btn btn-primary" type="submit">Department Head View</button>
-					  </form>
-					 </li>
+						
+							<a href="dashboard?view=departmentHead" class="btn btn-info" role="button">Department Head View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Benefits Coordinator")){ %>
-					<li class="list-group-item">
-					  <form action="dashboard" method="GET">
-					  	<input name="view" type="hidden" value="benefitsCoordinator">
-					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
-					  </form>
-					 </li>
+						
+							<a href="dashboard?view=benefitsCoordinator" class="btn btn-info" role="button">Benefits Coordinator</a>
+						
 					<% } %>
-						<li class="list-group-item">
+						
 							<button id="logout" type="button" class="btn btn-primary">Logout</button>
-						</li>
+						
 					</ul>
 				</div>
 				<div class="col-sm-9">
@@ -63,9 +50,26 @@
 					<% for(int i = 0; i < reimbursements.size(); i++){ %>
 						<div class="card">
 							<div class="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" aria-expanded="false" aria-controls='collapse<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>' role="tab" id="heading<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
-								<h5 class="mb-0">
-									ID: <%= reimbursements.get(i).getReimbursement().getReimbursementId() %> Employee Name: <%= reimbursements.get(i).getEmployee().getFirstName() %> <%= reimbursements.get(i).getEmployee().getLastName() %> Projected Reimbursement: <%= currencyFormat.format(reimbursements.get(i).getReimbursement().getCost() * reimbursements.get(i).getReimbursement().getCoverage()) %> Status: <%= reimbursements.get(i).getReimbursement().getStatus() %>
-								</h5>
+								<div class="row">
+									<div class="col-sm-6">
+										<h5>ID: <%= reimbursements.get(i).getReimbursement().getReimbursementId() %></h5>
+									</div>
+									<div class="col-sm-6">
+										<h5>Employee Name: <%= reimbursements.get(i).getEmployee().getFirstName() %> <%= reimbursements.get(i).getEmployee().getLastName() %></h5>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<% if(reimbursements.get(i).getReimbursement().getAdjustedCost() == 0){ %>
+										<h5>Projected Reimbursement: <span id="projectedReimbursement"><%= currencyFormat.format(reimbursements.get(i).getReimbursement().getCost() * reimbursements.get(i).getReimbursement().getCoverage()) %></span></h5>
+										<% }else{ %>
+										<h5>Adjusted Reimbursement: <span id="projectedReimbursement"><%= currencyFormat.format(reimbursements.get(i).getReimbursement().getAdjustedCost()) %></span></h5>
+										<% } %>
+									</div>
+									<div class="col-sm-6">
+										<h5>Status: <%= reimbursements.get(i).getReimbursement().getStatus() %></h5>
+									</div>
+								</div>
 							</div>
 							<div id="collapse<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
 								<div class="card-body">
@@ -182,13 +186,10 @@
 									<br>
 									<div class="row">
 										<div class="col-sm-12">
-											<input type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
-											<form action="updatestatus" method="POST">
-												<input type="hidden" name="approve-reimbursementId" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
-												<input type="hidden" name="role" value="departmentHead">
-												<input name="approval" type="hidden" value="APPROVED">
-												<button id="approve" type="submit" class="btn btn-success">Approve</button>
-											</form>
+											<input id="approve-reimbursementId" type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
+											<input id="approve-role" name="role" type="hidden" value="departmentHead" readonly>
+											<input id="approve-approval" name="approval" type="hidden" value="APPROVED" readyonly>
+											<button id="approve" type="submit" class="btn btn-success">Approve</button>
 											<button id="deny" type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
 										</div>
 									</div>

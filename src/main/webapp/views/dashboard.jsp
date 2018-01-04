@@ -18,41 +18,38 @@
 					<ul class="list-group">
 					<% Employee employee = (Employee) request.getAttribute("employee"); %>
 					<% if(employee.getRoles().contains("Employee")){ %>
-						<li class="list-group-item">
-							<form action="dashboard" method="GET">
-							  	<input name="view" type="hidden" value="employee">
-							  	<button class="btn btn-primary" type="submit">Employee View</button>
-							 </form>
-						</li>
+						
+							<a href="dashboard?view=employee" class="btn btn-info" role="button">Employee View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Supervisor")){ %>
-					<li class="list-group-item">
-							<form action="dashboard" method="GET">
-					  			<input name="view" type="hidden" value="supervisor">
-					  			<button class="btn btn-primary" type="submit">Supervisor View</button>
-					 		 </form>
-						</li>
-					  
+					
+							<a href="dashboard?view=supervisor" class="btn btn-info" role="button">Supervisor View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Department Head")){ %>
-					  <form action="dashboard" method="GET">
-					  	<input name="view" type="hidden" value="departmentHead">
-					  	<button class="btn btn-primary" type="submit">Department Head View</button>
-					  </form>
+						
+							<a href="dashboard?view=departmentHead" class="btn btn-info" role="button">Department Head View</a>
+						
 					<% } %>
 					<% if(employee.getRoles().contains("Benefits Coordinator")){ %>
-					  <form action="dashboard" method="GET">
-					  	<input name="view" type="hidden" value="benefitsCoordinator">
-					  	<button class="btn btn-primary" type="submit">Benefits Coordinator</button>
-					  </form>
+						
+							<a href="dashboard?view=benefitsCoordinator" class="btn btn-info" role="button">Benefits Coordinator</a>
+						
 					<% } %>
-						<li class="list-group-item">
+						
 							<button id="logout" type="button" class="btn btn-primary">Logout</button>
-						</li>
+						
 					</ul>
 				</div>
 				<div class="col-sm-9">
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createReimbursement">Submit New Reimbursement Form</button>
+					<div id="errCreate" class="hidden alert alert-danger alert-dismissible fade show" role="alert">
+						
+  						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+   						 <span aria-hidden="true">&times;</span>
+  						</button>
+					</div>
+					<button id="submitNewReimbursement" type="button" class="btn btn-primary" data-toggle="modal" data-target="#createReimbursement">Submit New Reimbursement Form</button>
 					<div id="accordion" role="tablist" aria-multiselectable="true">
 					<%! List<Reimbursement> reimbursements; %>
 					<% reimbursements = (List) request.getAttribute("reimbursements"); %>
@@ -61,9 +58,23 @@
 					<% for(int i = reimbursements.size() - 1; i >= 0; i--){ %>
 						<div class="card">
 							<div class="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= reimbursements.get(i).getReimbursementId() %>" aria-expanded="false" aria-controls='collapse<%= reimbursements.get(i).getReimbursementId() %>' role="tab" id="heading<%= reimbursements.get(i).getReimbursementId() %>">
-								<h5 class="mb-0">
-									ID: <%= reimbursements.get(i).getReimbursementId() %> Projected Reimbursement: <%= currencyFormat.format(reimbursements.get(i).getCost() * reimbursements.get(i).getCoverage()) %> Status: <%= reimbursements.get(i).getStatus() %>
-								</h5>
+								<div class="row">
+									<div class="col-sm-12">
+										<h5>ID: <%= reimbursements.get(i).getReimbursementId() %></h5>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<% if(reimbursements.get(i).getAdjustedCost() == 0){ %>
+										<h5>Projected Reimbursement: <span id="projectedReimbursement"><%= currencyFormat.format(reimbursements.get(i).getCost() * reimbursements.get(i).getCoverage()) %></span></h5>
+										<% }else{ %>
+										<h5>Adjusted Reimbursement: <span id="projectedReimbursement"><%= currencyFormat.format(reimbursements.get(i).getAdjustedCost()) %></span></h5>
+										<% } %>
+									</div>
+									<div class="col-sm-6">
+										<h5>Status: <%= reimbursements.get(i).getStatus() %></h5>
+									</div>
+								</div>
 							</div>
 							<div id="collapse<%= reimbursements.get(i).getReimbursementId() %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= reimbursements.get(i).getReimbursementId() %>">
 								<div class="card-body">
@@ -189,7 +200,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal fade" id="createReimbursement" tabindex="-1" role="dialog" aria-labelledby="ReimbursementForm" aria-hidden="true">
+		<div id="createReimbursement" class="modal fade" id="createReimbursement" tabindex="-1" role="dialog" aria-labelledby="ReimbursementForm" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
