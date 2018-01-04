@@ -64,7 +64,7 @@ public class NewReimbursement extends HttpServlet {
 			timeMissed = 0;
 		}
 		String[] date = request.getParameter("startDate").split("-");
-		System.out.println(Arrays.toString(date));
+
 		Calendar calendar = new GregorianCalendar(Integer.parseInt(date[0]), Integer.parseInt(date[1]) -1 , Integer.parseInt(date[2]));
 		//attachment
 		byte[] attachment = request.getPart("attachment").getInputStream().readAllBytes();
@@ -81,9 +81,7 @@ public class NewReimbursement extends HttpServlet {
 		}
 		
 		long difference = TimeUnit.MILLISECONDS.toDays(startDate.getTime() - nowDate.getTime());
-		System.out.println(startDate);
-		System.out.println(nowDate);
-		System.out.println(difference);
+		
 		if(difference < 7) {
 			json.put("ERROR", "Unable to submit reimbursement form. Cannot create reimbursement for an event that will happen within a week.");
 			response.getWriter().print(json.toString());
