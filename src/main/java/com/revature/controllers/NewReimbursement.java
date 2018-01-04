@@ -133,8 +133,17 @@ public class NewReimbursement extends HttpServlet {
 		json.put("city", reimbursement.getCity());
 		json.put("zip", reimbursement.getZip());
 		json.put("country", reimbursement.getCountry());
-		json.put("denyReason", reimbursement.getDenyReason());
-		json.put("inflatedReimbursementReason", reimbursement.getInflatedReimbursementReason());
+		if(reimbursement.getDenyReason() == null) {
+			json.put("denyReason", "--");
+		}else {
+			json.put("denyReason", reimbursement.getDenyReason());
+		}
+		if(reimbursement.getInflatedReimbursementReason() == null) {
+			json.put("inflatedReimbursementReason", "--");
+		}else {
+			json.put("inflatedReimbursementReason", reimbursement.getInflatedReimbursementReason());
+		}
+		
 		response.getWriter().print(json.toString());
 	}
 

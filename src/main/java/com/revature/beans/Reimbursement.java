@@ -42,6 +42,7 @@ public class Reimbursement implements Serializable {
 	private String workJustification;
 	private Blob attachment;
 	private Blob approvalDocument;
+	private Blob grade;
 	private int approvalId;
 	private String status;
 	private int timeMissed;
@@ -371,6 +372,15 @@ public class Reimbursement implements Serializable {
 	public void setDepartmentHeadEmail(String departmentHeadEmail) {
 		this.departmentHeadEmail = departmentHeadEmail;
 	}
+
+	public Blob getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Blob grade) {
+		this.grade = grade;
+	}
+	
 	
 	
 

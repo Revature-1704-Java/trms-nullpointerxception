@@ -241,6 +241,29 @@
 											<% } %>
 										</div>
 									</div>
+									<br>
+									<% if(reimbursements.get(i).getGrade() != null){ %>
+									<div class="row">
+										<div class="col-sm-12">
+										Grade/Presentation Submitted
+									</div>
+									<% }else{ %>
+									<br>
+									<div class="row">
+										<div class="col-sm-12">
+											<form id="formSubmitGrade" class="form-inline" enctype="multipart/form-data" name="submitGrade">
+												<div class="form-group">
+													<input name="id" type="hidden" value="<%= reimbursements.get(i).getReimbursementId() %>">
+													<input name="grade" type="file">
+												</div>
+												<div class="form-group">
+													<button type="submit" class="btn btn-info">Submit</button>
+												</div>
+											</form>
+										</div>
+									</div>
+									<br>
+									<% } %>
 									<% if(reimbursements.get(i).getAdjustedCost() != 0 && !reimbursements.get(i).getStatus().equals("EMPLOYEE CANCELED")){ %>
 									<div class="row">
 										<div class="col-sm-12">

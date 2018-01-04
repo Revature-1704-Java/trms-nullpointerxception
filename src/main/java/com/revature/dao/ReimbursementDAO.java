@@ -5,6 +5,7 @@ import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -241,6 +242,7 @@ public class ReimbursementDAO {
 				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
 				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
 				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
+				reimbursement.setGrade(rs.getBlob("grade"));
 				list.add(reimbursement);
 			}
 			
@@ -383,6 +385,7 @@ public class ReimbursementDAO {
 				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
 				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
 				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
+				reimbursement.setGrade(rs.getBlob("grade"));
 			}
 			
 			rs.close();
@@ -469,6 +472,7 @@ public class ReimbursementDAO {
 				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
 				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
 				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
+				reimbursement.setGrade(rs.getBlob("grade"));
 				employee.setEmployeeId(rs.getInt("employeeid"));
 				employee.setEmail(rs.getString("email"));
 				employee.setFirstName(rs.getString("firstname"));
@@ -566,6 +570,7 @@ public class ReimbursementDAO {
 				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
 				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
 				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
+				reimbursement.setGrade(rs.getBlob("grade"));
 				employee.setEmployeeId(rs.getInt("employeeid"));
 				employee.setEmail(rs.getString("email"));
 				employee.setFirstName(rs.getString("firstname"));
@@ -659,6 +664,7 @@ public class ReimbursementDAO {
 				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
 				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
 				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
+				reimbursement.setGrade(rs.getBlob("grade"));
 				employee.setEmployeeId(rs.getInt("employeeid"));
 				employee.setEmail(rs.getString("email"));
 				employee.setFirstName(rs.getString("firstname"));
@@ -871,5 +877,32 @@ public class ReimbursementDAO {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void uploadGrade(int id, byte[] file) {
+		String sql = "UPDATE reimbursement SET grade=? WHERE reimbursementid=?";
+		PreparedStatement ps = null;
+		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
+		try (Connection conn = connectionUtil.getConnection()){
+			
+			ps = conn.prepareStatement(sql);
+			Blob grade = conn.createBlob();
+			grade.setBytes(file.length, file);
+			ps.setBlob(1, grade);
+			ps.setInt(2, id);
+			
+			ps.executeUpdate();
+			
+			ps.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 $(function(){
 	
 	$('#formPassingGrade').hide();
+	$('#gradeSubmitted').hide();
 	
 	document.getElementById('newReimbursement').addEventListener('submit', function(e){
 		e.preventDefault();
@@ -174,6 +175,13 @@ $(function(){
 			$('#formPassingGrade').hide();
 		}
 		
+	});
+	
+	document.getElementById('formSubmitGrade').addEventListener('submit', function(){
+		var data = new FormData(this);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', 'uploadgrade');
+		xhr.send(data);
 	});
 	
 
