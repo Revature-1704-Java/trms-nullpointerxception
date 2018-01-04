@@ -6,6 +6,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -19,7 +20,6 @@ import com.revature.beans.EventType;
 import com.revature.beans.GradeFormat;
 import com.revature.beans.Reimbursement;
 import com.revature.util.ConnectionUtil;
-import com.revature.util.ConnectionUtilTest;
 
 import oracle.jdbc.OracleTypes;
 
@@ -190,7 +190,14 @@ public class ReimbursementDAO {
 			cs.execute();
 			
 			rs = (ResultSet) cs.getObject(2);
+			
+			// Deletee this
+			ResultSetMetaData rsmd = rs.getMetaData();
+			for(int i = 1; i < rsmd.getColumnCount() ; i++) {
+				System.out.println(rsmd.getColumnLabel(i));
+			}
 			while(rs.next()) {
+				
 				reimbursement = new Reimbursement();
 				reimbursement.setReimbursementId(rs.getInt("reimbursementid"));
 				reimbursement.setEmployeeId(rs.getInt("employeeid"));
@@ -226,6 +233,14 @@ public class ReimbursementDAO {
 				reimbursement.setTimeMissed(rs.getInt("timemissed"));
 				reimbursement.setDenyReason(rs.getString("denyreason"));
 				reimbursement.setInflatedReimbursementReason(rs.getString("inflatedreimbursementreason"));
+				reimbursement.setSupervisorId(rs.getInt("supervisorid"));
+				reimbursement.setSupervisorEmail(rs.getString("supervisoremail"));
+				reimbursement.setSupervisorFirstName(rs.getString("supervisorfirstname"));
+				reimbursement.setSupervisorLastName(rs.getString("supervisorlastname"));
+				reimbursement.setDepartmentHeadId(rs.getInt("departmentheadid"));
+				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
+				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
+				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
 				list.add(reimbursement);
 			}
 			
@@ -360,6 +375,14 @@ public class ReimbursementDAO {
 				reimbursement.setTimeMissed(rs.getInt("timemissed"));
 				reimbursement.setDenyReason(rs.getString("denyreason"));
 				reimbursement.setInflatedReimbursementReason(rs.getString("inflatedreimbursementreason"));
+				reimbursement.setSupervisorId(rs.getInt("supervisorid"));
+				reimbursement.setSupervisorEmail(rs.getString("supervisoremail"));
+				reimbursement.setSupervisorFirstName(rs.getString("supervisorfirstname"));
+				reimbursement.setSupervisorLastName(rs.getString("supervisorlastname"));
+				reimbursement.setDepartmentHeadId(rs.getInt("departmentheadid"));
+				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
+				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
+				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
 			}
 			
 			rs.close();
@@ -438,6 +461,14 @@ public class ReimbursementDAO {
 				reimbursement.setTimeMissed(rs.getInt("timemissed"));
 				reimbursement.setDenyReason(rs.getString("denyreason"));
 				reimbursement.setInflatedReimbursementReason(rs.getString("inflatedreimbursementreason"));
+				reimbursement.setSupervisorId(rs.getInt("supervisorid"));
+				reimbursement.setSupervisorEmail(rs.getString("supervisoremail"));
+				reimbursement.setSupervisorFirstName(rs.getString("supervisorfirstname"));
+				reimbursement.setSupervisorLastName(rs.getString("supervisorlastname"));
+				reimbursement.setDepartmentHeadId(rs.getInt("departmentheadid"));
+				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
+				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
+				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
 				employee.setEmployeeId(rs.getInt("employeeid"));
 				employee.setEmail(rs.getString("email"));
 				employee.setFirstName(rs.getString("firstname"));
@@ -527,6 +558,14 @@ public class ReimbursementDAO {
 				reimbursement.setTimeMissed(rs.getInt("timemissed"));
 				reimbursement.setDenyReason(rs.getString("denyreason"));
 				reimbursement.setInflatedReimbursementReason(rs.getString("inflatedreimbursementreason"));
+				reimbursement.setSupervisorId(rs.getInt("supervisorid"));
+				reimbursement.setSupervisorEmail(rs.getString("supervisoremail"));
+				reimbursement.setSupervisorFirstName(rs.getString("supervisorfirstname"));
+				reimbursement.setSupervisorLastName(rs.getString("supervisorlastname"));
+				reimbursement.setDepartmentHeadId(rs.getInt("departmentheadid"));
+				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
+				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
+				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
 				employee.setEmployeeId(rs.getInt("employeeid"));
 				employee.setEmail(rs.getString("email"));
 				employee.setFirstName(rs.getString("firstname"));
@@ -612,6 +651,14 @@ public class ReimbursementDAO {
 				reimbursement.setTimeMissed(rs.getInt("timemissed"));
 				reimbursement.setDenyReason(rs.getString("denyreason"));
 				reimbursement.setInflatedReimbursementReason(rs.getString("inflatedreimbursementreason"));
+				reimbursement.setSupervisorId(rs.getInt("supervisorid"));
+				reimbursement.setSupervisorEmail(rs.getString("supervisoremail"));
+				reimbursement.setSupervisorFirstName(rs.getString("supervisorfirstname"));
+				reimbursement.setSupervisorLastName(rs.getString("supervisorlastname"));
+				reimbursement.setDepartmentHeadId(rs.getInt("departmentheadid"));
+				reimbursement.setDepartmentHeadEmail(rs.getString("departmentheademail"));
+				reimbursement.setDepartmentHeadFirstName(rs.getString("departmentheadfirstname"));
+				reimbursement.setDepartmentHeadLastName(rs.getString("departmentheadlastname"));
 				employee.setEmployeeId(rs.getInt("employeeid"));
 				employee.setEmail(rs.getString("email"));
 				employee.setFirstName(rs.getString("firstname"));

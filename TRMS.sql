@@ -198,7 +198,7 @@
 --  DDL for Sequence APPROVALPROCESS_SEQUENCE
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "ADMIN"."APPROVALPROCESS_SEQUENCE"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 341 CACHE 20 NOORDER  NOCYCLE ;
+   CREATE SEQUENCE  "ADMIN"."APPROVALPROCESS_SEQUENCE"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 361 CACHE 20 NOORDER  NOCYCLE ;
 --------------------------------------------------------
 --  DDL for Sequence EMPLOYEEROLE_SEQUENCE
 --------------------------------------------------------
@@ -235,7 +235,6 @@ SET DEFINE OFF;
 Insert into ADMIN.DEPARTMENT (DEPARTMENTID,DEPARTMENT) values (1,'Department 1');
 Insert into ADMIN.DEPARTMENT (DEPARTMENTID,DEPARTMENT) values (2,'Department 2');
 Insert into ADMIN.DEPARTMENT (DEPARTMENTID,DEPARTMENT) values (3,'Department 3');
-
 
 REM INSERTING into ADMIN.EMPLOYEETYPE
 SET DEFINE OFF;
@@ -393,7 +392,7 @@ set define off;
 AS
 BEGIN
     OPEN rs FOR
-    SELECT * FROM ((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) INNER JOIN employee ON reimbursement.employeeid=employee.employeeid) WHERE reimbursement.approvalid IN (3, 5) ORDER BY employeecreationdate, employeecreationtime;
+    SELECT reimbursement.*, approvalprocess.*, reimbursementlocation.*, gradeformat.*, eventtype.*, approval.*, employee.*, supervisor.employeeid AS supervisorid, supervisor.email AS supervisoremail, supervisor.firstname AS supervisorfirstname, supervisor.lastname AS supervisorlastname, departmenthead.employeeid AS departmentheadid, departmenthead.employeeid AS departmentid, departmenthead.email AS departmentheademail, departmenthead.firstname AS departmentheadfirstname, departmenthead.lastname AS departmentheadlastname FROM ((((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) INNER JOIN employee ON reimbursement.employeeid=employee.employeeid) LEFT JOIN employee supervisor ON reimbursement.supervisorid=supervisor.employeeid) LEFT JOIN employee departmenthead ON reimbursement.departmentheadid=departmenthead.employeeid) WHERE reimbursement.approvalid IN (3, 5) ORDER BY employeecreationdate, employeecreationtime;
 END;
 
 /
@@ -406,7 +405,7 @@ set define off;
 AS
 BEGIN
     OPEN rs FOR
-    SELECT * FROM ((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) INNER JOIN employee ON reimbursement.employeeid=employee.employeeid) WHERE employee.departmentid=p_departmentid AND status IN ('PENDING APPROVAL FROM DEPARTMENT HEAD', 'PENDING APPROVAL FROM BENEFITS COORDINATOR','REIMBURSEMENT AMOUNT ALTERED','APPROVED') ORDER BY employeecreationdate,employeecreationtime;
+    SELECT reimbursement.*, approvalprocess.*, reimbursementlocation.*, gradeformat.*, eventtype.*, approval.*, employee.*, supervisor.employeeid AS supervisorid, supervisor.email AS supervisoremail, supervisor.firstname AS supervisorfirstname, supervisor.lastname AS supervisorlastname, departmenthead.employeeid AS departmentheadid, departmenthead.employeeid AS departmentid, departmenthead.email AS departmentheademail, departmenthead.firstname AS departmentheadfirstname, departmenthead.lastname AS departmentheadlastname FROM ((((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) INNER JOIN employee ON reimbursement.employeeid=employee.employeeid) LEFT JOIN employee supervisor ON reimbursement.supervisorid=supervisor.employeeid) LEFT JOIN employee departmenthead ON reimbursement.departmentheadid=departmenthead.employeeid) WHERE employee.departmentid=p_departmentid AND status IN ('PENDING APPROVAL FROM DEPARTMENT HEAD', 'PENDING APPROVAL FROM BENEFITS COORDINATOR','REIMBURSEMENT AMOUNT ALTERED','APPROVED') ORDER BY employeecreationdate,employeecreationtime;
 END;
 
 /
@@ -419,7 +418,7 @@ set define off;
 AS
 BEGIN
     OPEN rs FOR
-    SELECT * FROM ((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) INNER JOIN employee ON reimbursement.employeeid=employee.employeeid) WHERE employee.reportsto=p_employeeid ORDER BY employeecreationdate, employeecreationtime;
+    SELECT reimbursement.*, approvalprocess.*, reimbursementlocation.*, gradeformat.*, eventtype.*, approval.*, employee.*, supervisor.employeeid AS supervisorid, supervisor.email AS supervisoremail, supervisor.firstname AS supervisorfirstname, supervisor.lastname AS supervisorlastname, departmenthead.employeeid AS departmentheadid, departmenthead.employeeid AS departmentid, departmenthead.email AS departmentheademail, departmenthead.firstname AS departmentheadfirstname, departmenthead.lastname AS departmentheadlastname FROM ((((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) INNER JOIN employee ON reimbursement.employeeid=employee.employeeid) LEFT JOIN employee supervisor ON reimbursement.supervisorid=supervisor.employeeid) LEFT JOIN employee departmenthead ON reimbursement.departmentheadid=departmenthead.employeeid) WHERE employee.reportsto=p_employeeid ORDER BY employeecreationdate, employeecreationtime;
 END;
 
 /
@@ -446,7 +445,7 @@ AS
 BEGIN
 --SELECT * INTO rs FROM (((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) WHERE reimbursement.employeeid=inputemployeeid;
     OPEN rs FOR
-    SELECT * FROM (((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) WHERE reimbursement.employeeid=inputemployeeid ORDER BY employeecreationdate, employeecreationtime;
+    SELECT reimbursement.*, approvalprocess.*, reimbursementlocation.*, gradeformat.*, eventtype.*, approval.*, supervisor.employeeid AS supervisorid, supervisor.email AS supervisoremail, supervisor.firstname AS supervisorfirstname, supervisor.lastname AS supervisorlastname, departmenthead.employeeid AS departmentheadid, departmenthead.employeeid AS departmentid, departmenthead.email AS departmentheademail, departmenthead.firstname AS departmentheadfirstname, departmenthead.lastname AS departmentheadlastname FROM (((((((reimbursement INNER JOIN approvalprocess ON approvalprocess.approvalprocessid=reimbursement.approvalprocessid) INNER JOIN reimbursementlocation ON reimbursementlocation.reimbursementlocationid=reimbursement.reimbursementlocationid) INNER JOIN gradeformat ON gradeformat.gradeformatid=reimbursement.gradeformatid) INNER JOIN eventtype ON eventtype.eventtypeid=reimbursement.eventtypeid) INNER JOIN approval ON approval.approvalid=reimbursement.approvalid) LEFT JOIN employee supervisor ON reimbursement.supervisorid=supervisor.employeeid) LEFT JOIN employee departmenthead ON reimbursement.departmentheadid=departmenthead.employeeid) WHERE reimbursement.employeeid=inputemployeeid ORDER BY employeecreationdate, employeecreationtime;
 
 END;
 

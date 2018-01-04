@@ -15,8 +15,14 @@ public class Reimbursement implements Serializable {
 	private int approvalProcessId;
 	private Date employeeCreationDate;
 	private Timestamp employeeCreationTime;
+	private String supervisorFirstName;
+	private String supervisorLastName;
+	private String supervisorEmail;
 	private Date supervisorApproveDate;
 	private Date departmentHeadApproveDate;
+	private String departmentHeadFirstName;
+	private String departmentHeadLastName;
+	private String departmentHeadEmail;
 	private int reimbursementLocationId;
 	private Date startDate;
 	private String address;
@@ -317,5 +323,55 @@ public class Reimbursement implements Serializable {
 	public void setCustomPassingGrade(String customPassingGrade) {
 		this.customPassingGrade = customPassingGrade;
 	}
+
+	public String getSupervisorFirstName() {
+		return supervisorFirstName;
+	}
+
+	public void setSupervisorFirstName(String supervisorFirstName) {
+		this.supervisorFirstName = supervisorFirstName;
+	}
+
+	public String getSupervisorLastName() {
+		return supervisorLastName;
+	}
+
+	public void setSupervisorLastName(String supervisorLastName) {
+		this.supervisorLastName = supervisorLastName;
+	}
+
+	public String getSupervisorEmail() {
+		return supervisorEmail;
+	}
+
+	public void setSupervisorEmail(String supervisorEmail) {
+		this.supervisorEmail = supervisorEmail;
+	}
+
+	public String getDepartmentHeadFirstName() {
+		return departmentHeadFirstName;
+	}
+
+	public void setDepartmentHeadFirstName(String departmentHeadFirstName) {
+		this.departmentHeadFirstName = departmentHeadFirstName;
+	}
+
+	public String getDepartmentHeadLastName() {
+		return departmentHeadLastName;
+	}
+
+	public void setDepartmentHeadLastName(String departmentHeadLastName) {
+		this.departmentHeadLastName = departmentHeadLastName;
+	}
+
+	public String getDepartmentHeadEmail() {
+		return departmentHeadEmail;
+	}
+
+	public void setDepartmentHeadEmail(String departmentHeadEmail) {
+		this.departmentHeadEmail = departmentHeadEmail;
+	}
+	
+	
 
 }

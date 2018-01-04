@@ -101,18 +101,63 @@
 									</div>
 									<br>
 									<div class="row">
-										<div class="col-sm-6">
+										<div class="col-sm-4">
+											<% if(reimbursements.get(i).getReimbursement().getSupervisorId() != 0){ %>
+											Supervisor ID: <%= reimbursements.get(i).getReimbursement().getSupervisorId() %>
+											<% }else{ %>
+											Supervisor ID: --
+											<% } %>
+										</div>
+										<div class="col-sm-4">
+											<% if(reimbursements.get(i).getReimbursement().getSupervisorEmail() != null){ %>
+											Supervisor Email: <%= reimbursements.get(i).getReimbursement().getSupervisorEmail() %>
+											<% }else{ %>
+											Supervisor Email: --
+											<% } %>
+										</div>
+										<div clas="col-sm-4">
+											<% if(reimbursements.get(i).getReimbursement().getSupervisorFirstName() != null){ %>
+											Supervisor Name: <%= reimbursements.get(i).getReimbursement().getSupervisorFirstName() %> <%= reimbursements.get(i).getReimbursement().getSupervisorLastName() %>
+											<% }else{ %>
+											Supervisor Name: --
+											<% } %>
+										</div>
+										<div class="col-sm-4">
 											<% if(reimbursements.get(i).getReimbursement().getSupervisorApproveDate() == null){ %>
 											Supervisor Approval Date: --
 											<% }else{ %>
-											Supervisor Approval Date: <%= reimbursements.get(i).getReimbursement().getSupervisorApproveDate().toLocaleString() %>
+											Supervisor Approval Date: <%= reimbursements.get(i).getReimbursement().getSupervisorApproveDate().toLocalDate().toString() %>
 											<% } %>
 										</div>
-										<div class="col-sm-6">
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-4">
+											<% if(reimbursements.get(i).getReimbursement().getDepartmentHeadId() != 0){ %>
+											Department Head ID: <%= reimbursements.get(i).getReimbursement().getDepartmentHeadId() %>
+											<% }else{ %>
+											Department Head ID: --
+											<% } %>
+										</div>
+										<div class="col-sm-4">
+											<% if(reimbursements.get(i).getReimbursement().getDepartmentHeadEmail() != null){ %>
+											Department Head Email: <%= reimbursements.get(i).getReimbursement().getDepartmentHeadEmail()  %>
+											<% }else{ %>
+											Department Head Email: --
+											<% } %>
+										</div>
+										<div clas="col-sm-4">
+											<% if(reimbursements.get(i).getReimbursement().getDepartmentHeadFirstName() != null){ %>
+											Supervisor Name: <%= reimbursements.get(i).getReimbursement().getDepartmentHeadFirstName() %> <%= reimbursements.get(i).getReimbursement().getDepartmentHeadLastName() %>
+											<% }else{ %>
+											Supervisor Name: --
+											<% } %>
+										</div>
+										<div class="col-sm-4">
 											<% if(reimbursements.get(i).getReimbursement().getDepartmentHeadApproveDate() == null){ %>
 											Department Head Approval Date: --
 											<% }else{ %>
-											Department Head Approval Date: <%= reimbursements.get(i).getReimbursement().getDepartmentHeadApproveDate().toLocaleString() %>
+											Department Head Approval Date: <%= reimbursements.get(i).getReimbursement().getDepartmentHeadApproveDate().toLocalDate().toString() %>
 											<% } %>
 										</div>
 									</div>
