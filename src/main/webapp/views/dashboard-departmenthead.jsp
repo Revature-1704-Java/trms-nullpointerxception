@@ -74,10 +74,13 @@
 							<div id="collapse<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" class="collapse" role="tabpanel" aria-labelledby="heading<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>">
 								<div class="card-body">
 									<div class="row">
-										<div class="col-sm-6">
+										<div class="col-sm-4">
 											Employee Name: <%= reimbursements.get(i).getEmployee().getFirstName() %> <%= reimbursements.get(i).getEmployee().getLastName() %>
 										</div>
-										<div class="col-sm-6">
+										<div class="col-sm-4">
+											Employee Email: <%= reimbursements.get(i).getEmployee().getEmail() %>
+										</div>
+										<div class="col-sm-4">
 											Submitted: <%= reimbursements.get(i).getReimbursement().getEmployeeCreationTime().toLocaleString() %>
 										</div>
 									</div>
