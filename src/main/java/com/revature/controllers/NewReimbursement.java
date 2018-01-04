@@ -100,6 +100,7 @@ public class NewReimbursement extends HttpServlet {
 		json.put("employeeCreationTime", reimbursement.getEmployeeCreationTime().toLocaleString());
 		json.put("eventType", reimbursement.getEventType());
 		json.put("gradeFormat", reimbursement.getDefaultPassingGrade());
+		json.put("startDate", startDate.toLocalDate().toString());
 		if(reimbursement.getSupervisorApproveDate() == null) {
 			json.put("supervisorApprovalDate", "--");
 		}else {

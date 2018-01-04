@@ -81,7 +81,7 @@
 											Employee Email: <%= reimbursements.get(i).getEmployee().getEmail() %>
 										</div>
 										<div class="col-sm-4">
-											Submitted: <%= reimbursements.get(i).getReimbursement().getEmployeeCreationTime().toLocaleString() %>
+											Submitted: <%= reimbursements.get(i).getReimbursement().getEmployeeCreationTime().toLocalDateTime().toLocalDate().toString() %> <%= reimbursements.get(i).getReimbursement().getEmployeeCreationTime().toLocalDateTime().toLocalTime().toString() %>
 										</div>
 									</div>
 									<br>

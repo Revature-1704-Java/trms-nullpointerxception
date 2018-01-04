@@ -80,21 +80,27 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-sm-12">
-											Submitted: <%= reimbursements.get(i).getEmployeeCreationTime().toLocaleString() %>
+											Submitted: <%= reimbursements.get(i).getEmployeeCreationTime().toLocalDateTime().toLocalDate().toString() %> <%= reimbursements.get(i).getEmployeeCreationTime().toLocalDateTime().toLocalTime().toString() %>
 										</div>
 									</div>
 									<br>
 									<div class="row">
-										<div class="col-sm-3">
+										<div class="col-sm-4">
 											Cost: <%= currencyFormat.format(reimbursements.get(i).getCost()) %>
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-4">
 											Event Type: <%= reimbursements.get(i).getEventType() %>
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-4">
+											Start Date: <%= reimbursements.get(i).getStartDate().toLocalDate().toString() %>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-4">
 											Grade Format: <%= reimbursements.get(i).getFormat() %>
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-4">
 											Default Passing Grade: <%= reimbursements.get(i).getDefaultPassingGrade() %>
 										</div>
 									</div>
@@ -104,14 +110,14 @@
 											<% if(reimbursements.get(i).getSupervisorApproveDate() == null){ %>
 											Supervisor Approval Date: --
 											<% }else{ %>
-											Supervisor Approval Date: <%= reimbursements.get(i).getSupervisorApproveDate().toLocaleString() %>
+											Supervisor Approval Date: <%= reimbursements.get(i).getSupervisorApproveDate().toLocalDate().toString() %>
 											<% } %>
 										</div>
 										<div class="col-sm-6">
 											<% if(reimbursements.get(i).getDepartmentHeadApproveDate() == null){ %>
 											Department Head Approval Date: --
 											<% }else{ %>
-											Department Head Approval Date: <%= reimbursements.get(i).getDepartmentHeadApproveDate().toLocaleString() %>
+											Department Head Approval Date: <%= reimbursements.get(i).getDepartmentHeadApproveDate().toLocalDate().toString() %>
 											<% } %>
 										</div>
 									</div>
