@@ -17,6 +17,11 @@ import com.revature.util.ConnectionUtil;
 
 import oracle.jdbc.OracleTypes;
 
+/**
+ * Handles the operations between the server and the database for Employee-related functions.
+ * @author Steven Sagun
+ *
+ */
 public class EmployeeDAO {
 
 	private static EmployeeDAO employeeDAO;
@@ -47,6 +52,7 @@ public class EmployeeDAO {
 	 * @param firstName The first name of the new employee.
 	 * @param lastName The last name of the new employee.
 	 * @param reportsTo The id of the employee whom the new employee would directly work under.
+	 * @param departmentId THe id of the department the employee belongs to.
 	 * @return The employeeid of the employe that was created. 0 if the employee could not be created
 	 */
 	public int create(String email, String password, String firstName, String lastName, Integer reportsTo, Integer departmentId) {
@@ -102,10 +108,10 @@ public class EmployeeDAO {
 	}
 
 	/**
-	 * Find an employee based on an email and password combination.
+	 * Finds an employee based on an email and password combination.
 	 * @param email The email of the employee to find.
 	 * @param password The pass word of the employee to find
-	 * @return The employee
+	 * @return An instance of the employe that was retrieved.
 	 */
 	public Employee getEmployee(String email, String password) {
 		String sql = "{? = call app_user_security.valid_user (?, ?)}";
@@ -157,7 +163,7 @@ public class EmployeeDAO {
 	}
 	
 	/**
-	 * Set the roles for a specific employee. Also updates the employee to have those roles.
+	 * Sets the roles for a specific employee. Also updates the employee to have those roles.
 	 * @param e The Employee for which the roles will be set for
 	 * @param roles Vararg of roles to add to the employee
 	 * @return The number of roles added.

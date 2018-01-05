@@ -24,6 +24,11 @@ import com.revature.util.ConnectionUtil;
 
 import oracle.jdbc.OracleTypes;
 
+/**
+ * Handles the operations between the server and the database for Reimbursement-related functions.
+ * @author Steven Sagun
+ *
+ */
 public class ReimbursementDAO {
 	
 	private static ReimbursementDAO reimbursementDAO;
@@ -32,6 +37,10 @@ public class ReimbursementDAO {
 		
 	}
 	
+	/**
+	 * Get the singleton instance of the reimbursementDAO. If it doesn't exist, it will instantiate it and return that.
+	 * @return The singleton instance of the ReimbursementDAO.
+	 */
 	public static ReimbursementDAO getInstance() {
 		if(reimbursementDAO == null) {
 			reimbursementDAO = new ReimbursementDAO();
@@ -41,6 +50,25 @@ public class ReimbursementDAO {
 		}
 	}
 	
+	/**
+	 * Creates a reimbursement for the specified employee.
+	 * @param em The employe that submitted the reimbursement.
+	 * @param description The description of the reimbursement.
+	 * @param cost The cost of the event.
+	 * @param gradeFormat The grading format for the event.
+	 * @param eventType The event type.
+	 * @param workJustification The reason to take the event.
+	 * @param attachment An event-related attachement
+	 * @param approvalDocument An approval document
+	 * @param timeMissed The expected time missed for this event.
+	 * @param startDate The start date of the event.
+	 * @param address The address of the event.
+	 * @param city The city of the event.
+	 * @param zip The zip of the event.
+	 * @param country The country of the event.
+	 * @param passingGrade The passing grade of the event.
+	 * @return The id of the row that represents the reimbursement.
+	 */
 	public int create(Employee em, String description, double cost, String gradeFormat, String eventType, String workJustification, byte[] attachment, byte[] approvalDocument, int timeMissed, java.util.Date startDate, String address, String city, String zip, String country, String passingGrade) {
 		
 		String sql = "{call sp_insert_reimbursement (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
@@ -102,7 +130,11 @@ public class ReimbursementDAO {
 		return reimbursementId;
 	}
 	
-	public int createApprovalProcess() {
+	/**
+	 * Creates an Approval Process record that will contained the creation time and approve dates =.
+	 * @return The id of the approval process record.
+	 */
+	private int createApprovalProcess() {
 		
 		String sql = "{call sp_insert_approvalprocess (?, ?, ?)}";
 		CallableStatement cs = null;
@@ -135,7 +167,16 @@ public class ReimbursementDAO {
 		
 	}
 	
-	public int createReimbursementLocation(java.util.Date startDate, String address, String city, String zip, String country) {
+	/**
+	 * Creates a reimbursement location record.
+	 * @param startDate The start date of the event.
+	 * @param address The address of the event.
+	 * @param city The city of the event.
+	 * @param zip The zip of the event.
+	 * @param country The country of the event.
+	 * @return The id of the reimbursement location record.
+	 */
+	private int createReimbursementLocation(java.util.Date startDate, String address, String city, String zip, String country) {
 		String sql = "call sp_insert_reimlocation (?, ?, ?, ?, ?, ?)";
 		
 		CallableStatement cs = null;
@@ -174,6 +215,11 @@ public class ReimbursementDAO {
 		return reimbursementLocationId;
 	}
 	
+	/**
+	 * Returns all reimbursements for the specified employee.
+	 * @param em The employee to get all reimbursements for.
+	 * @return A list of reimbursements belonging to an employee.
+	 */
 	public List<Reimbursement> getAllByEmployee(Employee em){
 		
 		String getAllSQL = "{call sp_select_reimbursement (?, ?)}";
@@ -256,6 +302,10 @@ public class ReimbursementDAO {
 		return list;
 	}
 	
+	/**
+	 * Returns a list of all the eventypes available.
+	 * @return A list of all event types.
+	 */
 	public List<EventType> getEventTypes(){
 		List<EventType> events = new ArrayList<EventType>();
 		String sql = "SELECT * FROM eventtype ORDER BY eventtypeid";
@@ -290,6 +340,10 @@ public class ReimbursementDAO {
 		return events;
 	}
 
+	/**
+	 * Returns all grade formats.
+	 * @return A list of grade types.
+	 */
 	public List<GradeFormat> getGradeFormats(){
 		List<GradeFormat> gradeFormats = new ArrayList<GradeFormat>();
 		String sql = "SELECT * FROM gradeformat ORDER BY gradeformatid";
@@ -324,6 +378,11 @@ public class ReimbursementDAO {
 		return gradeFormats;
 	}
 	
+	/**
+	 * Get a reimbursement by id.
+	 * @param id The id of a reimbursement.
+	 * @return A reimbursement object. 
+	 */
 	public Reimbursement getById(int id) {
 		Reimbursement reimbursement = new Reimbursement();
 		String sql = "{call sp_select_one_reimbursement (?, ?)}";
@@ -404,6 +463,11 @@ public class ReimbursementDAO {
 		}
 	}
 
+	/**
+	 * The supervisor method to get all reimbursements of employees who reports to him/her.
+	 * @param id The id of the supervisor.
+	 * @return A list of all reimbursements of all reimbursements of employees who reports to him/her.
+	 */
 	public List<EmployeeReimbursement> getAllReimbursementsFromUnderlings(int id){
 		List<EmployeeReimbursement> list = new ArrayList<EmployeeReimbursement>();
 		String sql = "{call sp_select_all_underling_reim (?, ?)}";
@@ -502,6 +566,11 @@ public class ReimbursementDAO {
 		
 	}
 	
+	/**
+	 * Gets all the reimbursements in a specific department
+	 * @param departmentId The id of the department.
+	 * @return A list of reimbursements in a specified department.
+	 */
 	public List<EmployeeReimbursement> getAllReimbursementsFromDepartment(int departmentId) {
 		List<EmployeeReimbursement> list = new ArrayList<EmployeeReimbursement>();
 		String sql = "{call sp_select_all_department (?, ?)}";
@@ -597,6 +666,10 @@ public class ReimbursementDAO {
 		return list;
 	}
 	
+	/**
+	 * Returns all reimbursements that are waiting for Benefits Coordinator approval.
+	 * @return A list of all reimbursements that are waiting for Benefits Coordinator approval.
+	 */
 	public List<EmployeeReimbursement> getAllReimbursementsForBenCo() {
 		List<EmployeeReimbursement> list = new ArrayList<EmployeeReimbursement>();
 		String sql = "{call sp_select_all_benco (?)}";
@@ -691,7 +764,14 @@ public class ReimbursementDAO {
 		return list;
 	}
 	
-
+	/**
+	 * Updates a specific reimbursement's status.
+	 * @param id The id of the reimbursement.
+	 * @param user The user who is either approving or denying the reimbursement.
+	 * @param approval "APPROVED" or "DENIED".
+	 * @param reason The reason for denying if denying a reimbursement.
+	 * @param role The role of the user
+	 */
 	public void updateStatus(int id, Employee user , String approval, String reason, String role) {
 		ConnectionUtil connectionUtil = ConnectionUtil.getInstance();
 		CallableStatement cs = null;
@@ -870,6 +950,12 @@ public class ReimbursementDAO {
 		
 	}
 
+	/**
+	 * Alters a reimbursements amount
+	 * @param id The reimbursement.
+	 * @param alterAmount The new amount.
+	 * @param reason The reason for the alteration.
+	 */
 	public void alterReimbursementAmount(int id, double alterAmount, String reason) {
 		String sql = "{call sp_update_alter_reim (?,?,?)}";
 		CallableStatement cs = null;
@@ -897,6 +983,11 @@ public class ReimbursementDAO {
 		
 	}
 	
+	/**
+	 * Upload grade for a reimbursement.
+	 * @param id The id of the reimbursement.
+	 * @param file The file to upload.
+	 */
 	public void uploadGrade(int id, byte[] file) {
 		String sql = "UPDATE reimbursement SET grade=? WHERE reimbursementid=?";
 		PreparedStatement ps = null;
