@@ -192,11 +192,6 @@ public class ReimbursementDAO {
 			
 			rs = (ResultSet) cs.getObject(2);
 			
-			// Deletee this
-			ResultSetMetaData rsmd = rs.getMetaData();
-			for(int i = 1; i < rsmd.getColumnCount() ; i++) {
-				System.out.println(rsmd.getColumnLabel(i));
-			}
 			while(rs.next()) {
 				
 				reimbursement = new Reimbursement();
@@ -829,24 +824,47 @@ public class ReimbursementDAO {
 				}
 			}
 		}else if(role.equals("employee")) {
-			String sql = "{call sp_cancel_reim (?)}";
-			try (Connection conn = connectionUtil.getConnection()){
+			if(approval.equals("APPROVED")) {
+				String sql = "{call sp_approve_reimb_employee (?)}";
+				try (Connection conn = connectionUtil.getConnection()){
+					
+					cs = conn.prepareCall(sql);
+					cs.setInt(1, id);
+					
+					cs.execute();
+					cs.close();
+					
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
-				cs = conn.prepareCall(sql);
-				cs.setInt(1, id);
-				
-				cs.execute();
-				cs.close();
-				
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}else {
+				String sql = "{call sp_cancel_reim (?)}";
+				try (Connection conn = connectionUtil.getConnection()){
+					
+					cs = conn.prepareCall(sql);
+					cs.setInt(1, id);
+					
+					cs.execute();
+					cs.close();
+					
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		

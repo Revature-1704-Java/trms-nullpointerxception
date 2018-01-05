@@ -17,6 +17,7 @@
 				<div class="col-sm-3">
 					<ul class="list-group">
 					<% Employee employee = (Employee) request.getAttribute("employee"); %>
+					<%= employee.getEmployeeId() %>
 					<% if(employee.getRoles().contains("Employee")){ %>
 						
 							<a href="dashboard?view=employee" class="btn btn-info" role="button">Employee View</a>

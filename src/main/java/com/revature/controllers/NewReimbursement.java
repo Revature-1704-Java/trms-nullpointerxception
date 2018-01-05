@@ -102,7 +102,7 @@ public class NewReimbursement extends HttpServlet {
 		json.put("reimbursementId", reimbursement.getReimbursementId());
 		json.put("status", reimbursement.getStatus());
 		json.put("coverage", reimbursement.getCoverage());
-		json.put("cost", reimbursement.getCost());
+		json.put("cost", currencyFormat.format(reimbursement.getCost()));
 		json.put("projectedCost", currencyFormat.format(reimbursement.getCost() * reimbursement.getCoverage()));
 		json.put("employeeCreationTime", reimbursement.getEmployeeCreationTime().toLocaleString());
 		json.put("eventType", reimbursement.getEventType());

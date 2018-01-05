@@ -11,6 +11,7 @@ $(function(){
 		xhr.onload = function(){
 			let json = JSON.parse(xhr.responseText);
 			console.log(json);
+			let timeMissed;
 			if(json.hasOwnProperty('ERROR')){
 				
 				$('#errCreate').prepend(json.ERROR);
@@ -23,6 +24,11 @@ $(function(){
 					passingGrade = json.defaultPassingGrade;
 				}else{
 					passingGrade = json.customPassingGrade;
+				}
+				if(json.timeMissed != 0){
+					timeMissed = `${Math.floor(parseInt(json.timeMissed) / 24)}d		${parseInt(json.timeMissed) % 24}h`;
+				}else{
+					timeMissed = '--';
 				}
 				$('#createReimbursement').modal('hide');
 				$('#errCreate').hide();
@@ -106,7 +112,7 @@ $(function(){
 									<br>
 									<div class="row">
 										<div class="col-sm-12">
-											Time Missed: ${Math.floor(parseInt(json.timeMissed) / 24)}d		${parseInt(json.timeMissed) % 24}h
+											Time Missed: ${timeMissed}
 										</div>
 									</div>
 									<br>
@@ -155,11 +161,11 @@ $(function(){
 	});
 	
 	$('#cancelReimbursement').click(function(){
-		console.log('test');
+		let id = $(this).siblings('#cancel-reimbursementId').val();
 		$.ajax({
 			url:'updatestatus',
 			method:'POST',
-			data: {reimbursementId: $(this).siblings('input').val(), role: 'employee'},
+			data: {reimbursementId: id, approval:'DENIED'  ,role: 'employee'},
 			success: function(){
 				location.reload(true);
 			}
@@ -182,6 +188,19 @@ $(function(){
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', 'uploadgrade');
 		xhr.send(data);
+	});
+	
+	$('.approve-reimbursement').click(function(){
+		let id = $(this).siblings('#cancel-reimbursementId').val();
+		$.ajax({
+			url:'updatestatus',
+			method:'POST',
+			data: {reimbursementId: id, approval: 'APPROVED', role: 'employee'},
+			success: function(){
+				location.reload(true);
+			}
+				
+		});
 	});
 	
 

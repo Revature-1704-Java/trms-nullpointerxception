@@ -15,7 +15,6 @@ $(function(){
 	});
 	
 	$('.approve').click(function(){
-		console.log('test');
 		let i_id = $(this).siblings('#approve-reimbursementId').val();
 		let i_role = $('#approve-role').val();
 		let i_approval = $('#approve-approval').val();

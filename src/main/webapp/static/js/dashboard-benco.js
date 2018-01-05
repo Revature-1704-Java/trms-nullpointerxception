@@ -22,8 +22,8 @@ $(function(){
 	});
 	
 	$('.deny').click(function(){
-		let id = $(this).siblings('input').val();
-		$('#approve-reimbursementId').val(id);
+		let id = $(this).siblings('#approve-reimbursementId').val();
+		$('#reimbursementId').val(id);
 		
 	});
 	

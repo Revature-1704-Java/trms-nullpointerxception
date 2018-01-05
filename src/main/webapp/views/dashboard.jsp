@@ -17,6 +17,7 @@
 				<div class="col-sm-3">
 					<ul class="list-group">
 					<% Employee employee = (Employee) request.getAttribute("employee"); %>
+					<%=  employee.getEmployeeId() %>
 					<% if(employee.getRoles().contains("Employee")){ %>
 						
 							<a href="dashboard?view=employee" class="btn btn-info" role="button">Employee View</a>
@@ -264,10 +265,11 @@
 									</div>
 									<br>
 									<% } %>
-									<% if(reimbursements.get(i).getAdjustedCost() != 0 && !reimbursements.get(i).getStatus().equals("EMPLOYEE CANCELED")){ %>
+									<% if(reimbursements.get(i).getAdjustedCost() != 0 && !reimbursements.get(i).getStatus().equals("EMPLOYEE CANCELED") && !reimbursements.get(i).getStatus().equals("APPROVED")){ %>
 									<div class="row">
 										<div class="col-sm-12">
 											<input id="cancel-reimbursementId" type="hidden" value="<%= reimbursements.get(i).getReimbursementId() %>" readonly>
+											<button type="button" class="btn btn-success approve-reimbursement">Approve Reimbursement Change</button> 
 											<button id="cancelReimbursement" type="button" class="btn btn-danger">Cancel Reimbursement</div>
 										</div>
 									</div>

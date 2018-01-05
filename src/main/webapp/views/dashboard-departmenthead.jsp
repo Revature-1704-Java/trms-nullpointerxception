@@ -17,6 +17,7 @@
 				<div class="col-sm-3">
 					<ul class="list-group">
 					<% Employee employee = (Employee) request.getAttribute("employee"); %>
+					<%= employee.getEmployeeId() %>
 					<% if(employee.getRoles().contains("Employee")){ %>
 						
 							<a href="dashboard?view=employee" class="btn btn-info" role="button">Employee View</a>
@@ -237,7 +238,7 @@
 											<input id="approve-reimbursementId" type="hidden" value="<%= reimbursements.get(i).getReimbursement().getReimbursementId() %>" readonly>
 											<input id="approve-role" name="role" type="hidden" value="departmentHead" readonly>
 											<input id="approve-approval" name="approval" type="hidden" value="APPROVED" readyonly>
-											<button id="approve" type="submit" class="btn btn-success">Approve</button>
+											<button type="submit" class="btn btn-success approve">Approve</button>
 											<button id="deny" type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyReimbursement">Deny</button>
 										</div>
 									</div>
