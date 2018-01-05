@@ -7,6 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.revature.beans.Employee;
+
 /**
  * Servlet implementation class Logout
  */
@@ -14,20 +19,16 @@ import javax.servlet.http.HttpServletResponse;
 public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Logout() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	static final Logger logger = LogManager.getLogger("Logout");
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		Employee e =  (Employee) request.getSession().getAttribute("employee");
+		logger.info(e.getEmail() + " logged out.");
 		request.getSession().invalidate();
+		response.sendRedirect("login");
 	}
 
 	/**

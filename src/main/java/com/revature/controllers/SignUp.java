@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.beans.Employee;
 import com.revature.dao.EmployeeDAO;
 
@@ -21,13 +24,7 @@ import com.revature.dao.EmployeeDAO;
 public class SignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SignUp() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    static final Logger logger = LogManager.getLogger("SignUp");
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -65,6 +62,7 @@ public class SignUp extends HttpServlet {
 		Employee e = employeeDAO.getEmployee(email, password);
 		employeeDAO.setRoles(e, roles.toArray(new String[roles.size()]));
 		request.getSession().setAttribute("employee", e);
+		logger.info(e.getEmail() + " signed up.");
 		response.sendRedirect("dashboard");
 	}
 

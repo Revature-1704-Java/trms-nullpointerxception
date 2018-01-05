@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.beans.Employee;
 import com.revature.dao.EmployeeDAO;
 import com.revature.dao.ReimbursementDAO;
@@ -20,13 +23,7 @@ import com.revature.dao.ReimbursementDAO;
 public class LogIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LogIn() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	static final Logger logger = LogManager.getLogger("LogIn");
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -55,6 +52,7 @@ public class LogIn extends HttpServlet {
 		if(e == null) {
 			doGet(request, response);
 		}else {
+			logger.info(e.getEmail() + " logged in.");
 			request.getSession().setAttribute("employee", e);
 			response.sendRedirect("dashboard");
 		}
